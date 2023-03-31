@@ -1,7 +1,17 @@
+#ifndef STRING_H
+#define STRING_H
 #include <string.h>
-#include <stdlib.h>
+#endif
 
+#ifndef STDLIB_H
+#define STDLIB_H
+#include <stdlib.h>
+#endif
+
+#ifndef SOFTWARESERIAL_H
+#define SOFTWARESERIAL_H
 #include <SoftwareSerial.h>
+#endif
 
 extern SoftwareSerial HC12;
 

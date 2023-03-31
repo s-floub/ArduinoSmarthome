@@ -1,19 +1,27 @@
-/*    Arduino Long Range Wireless Communication using HC-12
-                      Example 01
-   by Dejan Nedelkovski, www.HowToMechatronics.com
-*/
+#ifndef TRANSMISSION_H
+#define TRANSMISSION_H
+#include "transmission.h"
+#endif
+
+#ifndef BOARDLOGIC_H
+#define BOARDLOGIC_H
+#include "boardLogic.h"
+#endif
+
+#ifndef MAINBOARD_H
+#define MAINBOARD_H
+#include "mainBoard.h"
+#endif
 
 #define PRINTEVERYTHING 0
-
-#include "transmission.h"
 
 #define POTPIN A0
 
 // 0: mother, 1: sensor, 2: actuator
-const productType PRODUCTWHAT = mainBoard;
+const productType PRODUCTWHAT = sensorBoard;
 
 // No meaning besides as identifier
-const char PRODUCTNUM[3] = "00";
+const char PRODUCTNUM[3] = "11";
 
 SoftwareSerial HC12(10, 11); // HC-12 TX Pin, HC-12 RX Pin
 
@@ -41,31 +49,10 @@ void loop() {
       strncat(readBuffer, char(incomingByte), 1);    // Add each byte to ReadBuffer string variable
     }*/
 else {
-    sendMessage(createMessage(pot, pureData, (float) (analogRead(POTPIN) + 0.5)));
-
-    delay(2000);
+  if(HC12.available() > 8){
+    delay(1000);
+    dealWithMessage(reciveTransmission());
+  }
 }
     
   }
-
-void dealWithMessage(){
-
-  switch(PRODUCTWHAT){
-    case sensorBoard:
-      
-      break;
-
-    case actuatorBoard:
-
-      break;
-
-    case mainBoard:
-
-      break;
-
-    default:
-
-      break;
-  }
-
-}
