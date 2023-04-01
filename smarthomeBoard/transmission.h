@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <SoftwareSerial.h>
+#include "config.h"
 
 extern SoftwareSerial HC12;
 
@@ -54,7 +55,7 @@ enum dataType{ //Data Type
 
 typedef union unionData{ //Union for data portion of the message
   int intData;
-  char strData[30]; //Max of 29 chars
+  char strData[MAXDATASTRINGLEN];
   float floatData;
 } UnionData;
 
@@ -76,10 +77,11 @@ typedef struct data{ //Data to be sent / is recived
           data.floatData = dataC.data.floatData;
         }
         else if (type == strType){
+          //data.strData = '\0';
           strcpy(data.strData, dataC.data.strData); //string copy handled with strcpy
         }
         else{
-          data.intData = 111111; //Should never reach here
+          data.intData = 11111; //Should never reach here
         }
 
       }

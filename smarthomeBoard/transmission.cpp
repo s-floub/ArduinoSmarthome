@@ -23,6 +23,19 @@ Message createMessage(deviceType sensor, messageType messageType, int data){
 Message createMessage(deviceType sensor, messageType messageType, char data[]){
   //Creates and returns Message with given specifications
 
+  if(strlen(data) > MAXDATASTRINGLEN - 1){ //Check if string is longer than allowable length
+
+    if(DEBUG) Serial.println("data too long for message, truncating (CREATEMESSAGE)");
+
+    //Create new string of correct length 
+    char shortenedStr[MAXDATASTRINGLEN];
+    shortenedStr[0] = '\0';
+    strcpy(shortenedStr, data);
+    shortenedStr[MAXDATASTRINGLEN - 1] = '\0'; 
+
+    return createMessage(sensor, messageType, shortenedStr);
+  }
+
   Message toReturn;
 
   toReturn.productWhat = PRODUCTWHAT;
@@ -35,7 +48,7 @@ Message createMessage(deviceType sensor, messageType messageType, char data[]){
 
   toReturn.messageType = messageType;
   toReturn.data.type = strType; 
-  strcpy(toReturn.data.data.strData, data); //I'm not checking to make sure the string is not to long, this is bad, I know
+  strcpy(toReturn.data.data.strData, data);
 
   return toReturn;
 }
@@ -77,7 +90,7 @@ Message createMessage(deviceType sensor, messageType messageType, Request data){
     requestToStr[5] = '\0';
 
     if(data.additional){
-        char additionalBuffer[24];
+        char additionalBuffer[7]; //int max length (base 10) is -32???, 6 digits
         itoa(data.additional, additionalBuffer, 10);
         strcat(requestToStr, additionalBuffer);
     }
@@ -87,8 +100,7 @@ Message createMessage(deviceType sensor, messageType messageType, Request data){
 }
 
 void sendMessage(Message message){
-  //Send Message using HC12
-  //Currently only sends on default channel
+  //Send Message using HC12 on current channel
 
     HC12.write(message.productWhat);
     HC12.write(message.productNum);
@@ -152,7 +164,24 @@ Message reciveTransmission(){ //Only call if enough avalable chars ie HC12.avali
         break;
 
         case strType:
-            strcpy(toReturn.data.data.strData, inputBuff.c_str());
+            //Check if string is too long
+            if(strlen(inputBuff.c_str()) > MAXDATASTRINGLEN - 1){
+              
+              if(DEBUG) Serial.println("data too long for message, truncating (RECIVETRANMISSION)");
+
+              //Create new string of correct length 
+              char shortenedStr[MAXDATASTRINGLEN];
+              shortenedStr[0] = '\0';
+              strcpy(shortenedStr, inputBuff.c_str());
+              shortenedStr[MAXDATASTRINGLEN - 1] = '\0';
+
+              strcpy(toReturn.data.data.strData, shortenedStr);
+            }
+
+            else{
+              strcpy(toReturn.data.data.strData, inputBuff.c_str());
+            }
+
         break;
 
         default:
@@ -178,6 +207,14 @@ Request parseRequest(Message message){
   toReturn.destination[3] = '\0';
 
   toReturn.device = (deviceType) message.data.data.strData[4];
+
+  String inputBuff = "";
+
+  for(int i = 5; message.data.data.strData[i] != '\0' && i < 11; i++){ //11 comes from max length of int with radix 10
+    inputBuff += (char) HC12.read();
+  }
+
+  if(inputBuff != "") toReturn.additional = atoi(inputBuff.c_str());
 
   return toReturn;
 }

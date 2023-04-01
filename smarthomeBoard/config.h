@@ -2,7 +2,6 @@
 #define CONFIG_H
 
 #include <Arduino.h>
-#include "transmission.h"
 
 //Used to set paramaters when debugging / device setup
 
@@ -15,6 +14,7 @@
 #define DEBUG 1
 
 #define MESSAGETIMEOUT 3000
+#define MAXDATASTRINGLEN 30
 
 #define POTPIN A0
 
