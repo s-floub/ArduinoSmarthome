@@ -1,7 +1,4 @@
-#ifndef BOARDLOGIC_H
-#define BOARDLOGIC_H
 #include "boardLogic.h"
-#endif
 
 extern SoftwareSerial HC12;
 

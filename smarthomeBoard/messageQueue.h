@@ -1,7 +1,7 @@
-#ifndef TRANSMISSION_H
-#define TRANSMISSION_H
+#ifndef MESSAGEQUEUE_H
+#define MESSAGEQUEUE_H
 #include "transmission.h"
-#endif
+
 
 typedef struct qItem	{   //struct of items to add to linked list implimented queue
 	struct qItem	*next;  //Next item in the queue
@@ -34,3 +34,5 @@ int Dequeue (pQueue queue, Message &messageReturn);
 // dequques all items from a queue, returning 0 if succeeding, and 
 // -1 if not.
 int DequeueAll (pQueue queue);
+
+#endif

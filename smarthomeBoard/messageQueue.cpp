@@ -1,7 +1,4 @@
-#ifndef MESSAGEQUEUE_H
-#define MESSAGEQUEUE_H
 #include "messageQueue.h"
-#endif
 
 
 pQueue CreateQueue (void) {

@@ -1,7 +1,4 @@
-#ifndef TRANSMISSION_H
-#define TRANSMISSION_H
 #include "transmission.h"
-#endif
 
 Message createMessage(deviceType sensor, messageType messageType, int data){
   //Creates and returns Message with given specifications

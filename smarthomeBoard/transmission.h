@@ -1,17 +1,9 @@
-#ifndef STRING_H
-#define STRING_H
+#ifndef TRANSMISSION_H
+#define TRANSMISSION_H
+
 #include <string.h>
-#endif
-
-#ifndef STDLIB_H
-#define STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifndef SOFTWARESERIAL_H
-#define SOFTWARESERIAL_H
 #include <SoftwareSerial.h>
-#endif
 
 extern SoftwareSerial HC12;
 
@@ -138,3 +130,5 @@ Message reciveTransmission();
 
 //Takes Message of Request type and parses it to Request struct
 Request parseRequest(Message message);
+
+#endif

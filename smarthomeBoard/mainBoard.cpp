@@ -1,7 +1,4 @@
-#ifndef MAINBOARD_H
-#define MAINBOARD_H
 #include "mainBoard.h"
-#endif
 
 
 // Function to create a new node

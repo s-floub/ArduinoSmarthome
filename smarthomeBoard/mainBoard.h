@@ -1,17 +1,9 @@
-#ifndef TRANSMISSION_H
-#define TRANSMISSION_H
+#ifndef MAINBOARD_H
+#define MAINBOARD_H
+
 #include "transmission.h"
-#endif
-
-#ifndef CONFIG_H
-#define CONFIG_H
 #include "config.h"
-#endif
-
-#ifndef ARDUINO_H
-#define ARDUINO_H
 #include <Arduino.h>
-#endif
 
 typedef struct device{
     productType productWhat; //What product (main, sensor, actuator)
@@ -30,3 +22,5 @@ int insertNode (List ourList, productType productWhat, char productNum[3], devic
 int deleteDevice (List ourList, productType productWhat, char productNum[3], deviceType sensor);
 int compareDevices(Device* first, Device* second);
 int queryList(List list);
+
+#endif

@@ -1,22 +1,7 @@
-#ifndef CONFIG_H
-#define CONFIG_H
 #include "config.h"
-#endif
-
-#ifndef TRANSMISSION_H
-#define TRANSMISSION_H
 #include "transmission.h"
-#endif
-
-#ifndef BOARDLOGIC_H
-#define BOARDLOGIC_H
 #include "boardLogic.h"
-#endif
-
-#ifndef MAINBOARD_H
-#define MAINBOARD_H
 #include "mainBoard.h"
-#endif
 
 #define POTPIN A0
 
