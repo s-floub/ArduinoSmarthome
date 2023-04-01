@@ -150,7 +150,7 @@ int queryDevice(Device* device){
     }
 
     if (HC12.available() >= 8){
-        
+        //Fill up queue and process all Messages in Queue
     }
 
 }

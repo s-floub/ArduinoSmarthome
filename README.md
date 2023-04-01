@@ -6,3 +6,6 @@ Attributions
 */
 
 CODE USED FROM MREN 178 Lab 1
+CODE USED FROM MREN 178 Lab 2
+
+https://www.geeksforgeeks.org/copy-constructor-in-cpp/
