@@ -109,3 +109,19 @@ void printMessageToSerialDEBUG(Message message){
  Serial.println("message.endChar");
     Serial.write(message.endChar);
 }
+
+
+
+void printRequestToSerialDEBUG(Request request){
+  if (!DEBUG) return;
+
+  Serial.println("request.destination");
+  Serial.write(request.destination);
+   Serial.println("request.device");
+  Serial.write(request.device);
+   Serial.println("request.type");
+  Serial.write(request.type);
+   Serial.println("request.additional");
+  Serial.print((int) request.additional);
+
+}

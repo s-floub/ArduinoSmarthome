@@ -10,4 +10,7 @@ int reciveMessageToQueue(pQueue queue);
 void dealWithMessage(Message message);
 
 void printMessageToSerialDEBUG(Message message);
+
+void printRequestToSerialDEBUG(Request request);
+
 #endif
