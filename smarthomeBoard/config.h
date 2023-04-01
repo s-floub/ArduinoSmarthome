@@ -9,7 +9,7 @@
 #define RETURN_ERR -1
 
 #define PRINTEVERYTHING 0
-#define MAINBOARD 0
+#define MAINBOARD 1
 
 #define DEBUG 1
 

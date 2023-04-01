@@ -65,3 +65,46 @@ void dealWithMessage(Message message){
   }
 
 }
+
+
+void printMessageToSerialDEBUG(Message message){
+  if (!DEBUG) return;
+
+    Serial.println("message.productWhat");
+    Serial.write(message.productWhat);
+     Serial.println("message.productNum");
+    Serial.write(message.productNum);
+     Serial.println("message.sensor");
+    Serial.write(message.sensor);
+     Serial.println("message.messageType");
+    Serial.write(message.messageType);
+     Serial.println("message.checkbyte");
+    Serial.write(message.checkbyte);
+
+     Serial.println("message.data.type");
+    Serial.write(message.data.type);
+
+    //Switch case prints data in the correct format
+    switch(message.data.type){
+        case intType:
+         Serial.println("message.data.data.intData");
+            Serial.print(message.data.data.intData);
+        break;
+
+        case floatType:
+         Serial.println("message.data.data.floatData");
+            Serial.print(message.data.data.floatData);
+        break;
+
+        case strType:
+         Serial.println("message.data.data.strData");
+            Serial.print(message.data.data.strData);
+        break;
+
+        default:
+            //Error case.
+        break;
+    }
+ Serial.println("message.endChar");
+    Serial.write(message.endChar);
+}

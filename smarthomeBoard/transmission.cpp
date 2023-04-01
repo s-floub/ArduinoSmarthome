@@ -83,7 +83,7 @@ Message createMessage(deviceType sensor, messageType messageType, char data[]){
   strcpy(toReturn.data.data.strData, data);
 
   toReturn.checkbyte += CHECKSUMDIG - checkMessageValidity(toReturn);
-
+  
   return toReturn;
 }
 

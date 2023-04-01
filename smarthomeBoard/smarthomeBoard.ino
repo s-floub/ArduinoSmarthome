@@ -28,6 +28,7 @@ void setup() {
 }
 
 char readBuffer[100];
+int adjust = 0;
 
 void loop() {
   if(PRINTEVERYTHING){
@@ -47,9 +48,11 @@ else if (MAINBOARD){
 
    //ProductNum = 11
 
+  adjust++;
+
   Request toSend;
 
-  toSend.destination[0] = '1';
+  toSend.destination[0] = '0' + (adjust % 8);
   toSend.destination[1] = '1';
   toSend.destination[2] = '1';
 
@@ -79,5 +82,17 @@ else{
   Serial.print("messageQueue->count ");
   Serial.println(messageQueue->count);
 }
+
+  if(messageQueue->count > 10){
+    while(messageQueue->count > 0){
+      Message messageToPrint;
+      Dequeue(messageQueue, messageToPrint);
+      printMessageToSerialDEBUG(messageToPrint);
+        Serial.print("messageQueue->count ");
+  Serial.println(messageQueue->count);
+      delay(10000);
+      
+    }
+  }
     
   }
