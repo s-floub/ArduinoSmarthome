@@ -69,6 +69,29 @@ typedef union unionData{ //Union for data portion of the message
 typedef struct data{ //Data to be sent / is recived
     UnionData data;
     dataType type;
+
+    //Manual assignment operator decleration
+    //Nessasary due to union and strings being strings
+    void operator=(const struct data& dataC)
+      {
+        type = dataC.type; //Type is kept same
+
+        //int and float copys are handled traditionally
+        if (type == intType){
+          data.intData = dataC.data.intData; 
+        }
+        else if (type == floatType){
+          data.floatData = dataC.data.floatData;
+        }
+        else if (type == strType){
+          strcpy(data.strData, dataC.data.strData); //string copy handled with strcpy
+        }
+        else{
+          data.intData = 111111; //Should never reach here
+        }
+
+      }
+
 } Data;
 
 typedef struct message{ //Message, recived or to be sent
@@ -80,7 +103,20 @@ typedef struct message{ //Message, recived or to be sent
     Data data; //The data portion of the message
     const char endChar = '\n'; //End charachter of ALL messages
 
-} Message;
+    //Manual assignment of assignment operator
+    //I think the reason this is required is because productNum is a string
+    void operator=(const struct message& mes)
+    {
+      productWhat = mes.productWhat;
+      productNum[0] = mes.productNum[0];     
+      productNum[1] = mes.productNum[1];    
+      productNum[2] = mes.productNum[2];  
+      sensor = mes.sensor;
+      messageType = mes.messageType;
+      data = mes.data;
+    }
+
+} Message, *pMessage;
 
 //Create and return message with given specifications, takes int data
 Message createMessage(deviceType sensor, messageType messageType, int data);
