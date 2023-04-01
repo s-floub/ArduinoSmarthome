@@ -95,6 +95,7 @@ typedef struct message{ //Message, recived or to be sent
     messageType messageType; //What type of message is this (data, command, error)
 
     Data data; //The data portion of the message
+    char checkbyte = '0';
     const char endChar = '\n'; //End charachter of ALL messages
 
     //Manual assignment of assignment operator
@@ -107,10 +108,14 @@ typedef struct message{ //Message, recived or to be sent
       productNum[2] = mes.productNum[2];  
       sensor = mes.sensor;
       messageType = mes.messageType;
+      checkbyte = mes.checkbyte;
       data = mes.data;
     }
 
 } Message, *pMessage;
+
+//Checks if message is valid, returns 0 if it is, non zero to add at end if not
+int checkMessageValidity(Message message);
 
 //Create and return message with given specifications, takes int data
 Message createMessage(deviceType sensor, messageType messageType, int data);
@@ -127,7 +132,9 @@ Message createMessage(deviceType device, messageType messageType, Request reques
 //Send Message with correct format using the HC12 Transmitter
 void sendMessage(Message message);
 
-//Recive and return Message from HC12 Transmitter
+//Recives transmission from HC12 and parces it into a Message
+//Only call if enough avalable chars ie HC12.avalible() > 9
+//Does not check for errors or invalid messages in this function
 Message reciveTransmission();
 
 //Takes Message of Request type and parses it to Request struct

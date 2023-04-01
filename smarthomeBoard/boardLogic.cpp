@@ -2,6 +2,24 @@
 
 extern SoftwareSerial HC12;
 
+int reciveMessageToQueue(pQueue queue){
+
+  if(HC12.available() < 6 ) return RETURN_ERR;
+
+  Message theMessage = reciveTransmission();
+
+  if(!checkMessageValidity(theMessage)) {
+
+    Enqueue(queue, CreateItem(theMessage));
+    return RETURN_OK;
+
+  }
+
+  if(DEBUG) Serial.println("RECIVEDINVALIDMESSAGE");
+  return RETURN_ERR;
+
+}
+
 void dealWithMessage(Message message){
 
   if(DEBUG){

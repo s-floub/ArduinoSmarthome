@@ -1,5 +1,36 @@
 #include "transmission.h"
 
+int checkMessageValidity(Message message){
+  int sum = 0;
+
+  sum += (int) message.productWhat;
+  sum += (int) message.productNum[0];
+  sum += (int) message.productNum[1];
+  sum += (int) message.productNum[2];
+  sum += (int) message.sensor;
+  sum += (int) message.messageType;
+  sum += (int) message.data.type;
+
+  switch(message.data.type){
+    case intType:
+        sum += (int) message.data.data.intData;
+    break;
+    case floatType:
+        sum += (int) message.data.data.floatData;
+    break;
+    case strType:
+        sum += (int) (strlen(message.data.data.strData));
+    break;
+    default:
+        //Error case.
+    break;
+  }
+
+  sum += (int) message.checkbyte;
+
+  return sum % 7; //7 is arbitary
+}
+
 Message createMessage(deviceType sensor, messageType messageType, int data){
   //Creates and returns Message with given specifications
 
@@ -16,6 +47,8 @@ Message createMessage(deviceType sensor, messageType messageType, int data){
   toReturn.messageType = messageType;
   toReturn.data.type = intType;
   toReturn.data.data.intData = data;
+
+  toReturn.checkbyte += checkMessageValidity(toReturn);
 
   return toReturn;
 }
@@ -50,6 +83,8 @@ Message createMessage(deviceType sensor, messageType messageType, char data[]){
   toReturn.data.type = strType; 
   strcpy(toReturn.data.data.strData, data);
 
+  toReturn.checkbyte += checkMessageValidity(toReturn);
+
   return toReturn;
 }
 
@@ -69,6 +104,8 @@ Message createMessage(deviceType sensor, messageType messageType, float data){
   toReturn.messageType = messageType;
   toReturn.data.type = floatType;
   toReturn.data.data.floatData = data;
+
+  toReturn.checkbyte += checkMessageValidity(toReturn);
 
   return toReturn;
 }
@@ -106,6 +143,7 @@ void sendMessage(Message message){
     HC12.write(message.productNum);
     HC12.write(message.sensor);
     HC12.write(message.messageType);
+    HC12.write(message.checkbyte);
 
     HC12.write(message.data.type);
 
@@ -132,8 +170,9 @@ void sendMessage(Message message){
 
 }
 
-Message reciveTransmission(){ //Only call if enough avalable chars ie HC12.avalible() > 8
+Message reciveTransmission(){ //Only call if enough avalable chars ie HC12.avalible() > 9
   //Recives transmission from HC12 and parces it into a Message
+  //Does not check for errors or invalid messages in this function
 
   Message toReturn;
 
@@ -145,6 +184,7 @@ Message reciveTransmission(){ //Only call if enough avalable chars ie HC12.avali
 
   toReturn.sensor = (deviceType) HC12.read();
   toReturn.messageType = (messageType) HC12.read();
+  toReturn.checkbyte = (char) HC12.read();
 
   toReturn.data.type = (dataType) HC12.read();
 
