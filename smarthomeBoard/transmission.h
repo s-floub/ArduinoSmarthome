@@ -25,6 +25,8 @@ extern const productType PRODUCTWHAT; //What product is this board, defined in s
 extern const char PRODUCTNUM[3]; //Unique identifying number, must be unique
 
 enum deviceType{ //Identifiers for devices, both sensors and actuators
+  main = '!',
+
   photo = '1', //Photoresistor, Sensor
   pot = '2', //Potentiomiter, Sensor
   temp = '3', //Tempature, Sensor
@@ -46,7 +48,7 @@ enum requestWhat{ //Request types
 };
 
 typedef struct request{ //Requests sent from main board
-    requestWhat type; //Type of request, wanting data, or commanding actuation
+    messageType type; //Type of request, wanting data, or commanding actuation
     char destination[4]; //Who this request is going to, 3 digits (4 for \0)
     deviceType device; //What device am I requesting to/from
     int additional = 0; //Used to specify additional info. ie. servo heading
@@ -70,7 +72,7 @@ typedef struct data{ //Data to be sent / is recived
 } Data;
 
 typedef struct message{ //Message, recived or to be sent
-    char productWhat; //What product (main, sensor, actuator)
+    productType productWhat; //What product (main, sensor, actuator)
     char productNum[3]; //Unique product identifier
     deviceType sensor; //What device is being accessed
     messageType messageType; //What type of message is this (data, command, error)
@@ -97,3 +99,6 @@ void sendMessage(Message message);
 
 //Recive and return Message from HC12 Transmitter
 Message reciveTransmission();
+
+//Takes Message of Request type and parses it to Request struct
+Request parseRequest(Message message);

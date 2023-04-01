@@ -1,4 +1,7 @@
+#ifndef TRANSMISSION_H
+#define TRANSMISSION_H
 #include "transmission.h"
+#endif
 
 Message createMessage(deviceType sensor, messageType messageType, int data){
   //Creates and returns Message with given specifications
@@ -68,17 +71,20 @@ Message createMessage(deviceType sensor, messageType messageType, Request data){
 
     requestToStr[0] = data.type;
 
-    requestToStr[1] = data.destination[0];
-    requestToStr[2] = data.destination[1];
-    requestToStr[3] = data.destination[2];
+    requestToStr[1] = (char) data.destination[0];
+    requestToStr[2] = (char) data.destination[1];
+    requestToStr[3] = (char) data.destination[2];
 
     requestToStr[4] = data.device;
+
+    requestToStr[5] = '\0';
 
     if(data.additional){
         char additionalBuffer[24];
         itoa(data.additional, additionalBuffer, 10);
         strcat(requestToStr, additionalBuffer);
     }
+
 
   return createMessage(sensor, messageType, requestToStr);
 }
@@ -122,20 +128,21 @@ Message reciveTransmission(){ //Only call if enough avalable chars ie HC12.avali
 
   Message toReturn;
 
-  toReturn.productWhat = HC12.read();
+  toReturn.productWhat = (productType) HC12.read();
 
   toReturn.productNum[0] = HC12.read();
   toReturn.productNum[1] = HC12.read();
+  toReturn.productNum[2] = '\0';
 
-  toReturn.sensor = HC12.read();
-  toReturn.messageType = HC12.read();
+  toReturn.sensor = (deviceType) HC12.read();
+  toReturn.messageType = (messageType) HC12.read();
 
-  toReturn.data.type = HC12.read();
+  toReturn.data.type = (dataType) HC12.read();
 
   String inputBuff = "";
 
   while(HC12.available() && HC12.peek() != '\n'){
-    inputBuff += HC12.read();
+    inputBuff += (char) HC12.read();
   }
 
     switch(toReturn.data.type){
@@ -160,4 +167,20 @@ Message reciveTransmission(){ //Only call if enough avalable chars ie HC12.avali
 
   return toReturn;
 
+}
+
+Request parseRequest(Message message){
+
+  Request toReturn;
+
+  toReturn.type = (messageType) message.data.data.strData[0];
+
+  toReturn.destination[0] = message.data.data.strData[1];
+  toReturn.destination[1] = message.data.data.strData[2];
+  toReturn.destination[2] = message.data.data.strData[3];
+  toReturn.destination[3] = '\0';
+
+  toReturn.device = (deviceType) message.data.data.strData[4];
+
+  return toReturn;
 }

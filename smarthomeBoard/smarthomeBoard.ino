@@ -7,13 +7,14 @@
 #define BOARDLOGIC_H
 #include "boardLogic.h"
 #endif
-
+/*
 #ifndef MAINBOARD_H
 #define MAINBOARD_H
 #include "mainBoard.h"
-#endif
+#endif*/
 
 #define PRINTEVERYTHING 0
+#define MAINBOARD 1
 
 #define POTPIN A0
 
@@ -48,11 +49,33 @@ void loop() {
       char incomingByte = HC12.read();          // Store each icoming byte from HC-12
       strncat(readBuffer, char(incomingByte), 1);    // Add each byte to ReadBuffer string variable
     }*/
-else {
-  if(HC12.available() > 8){
-    delay(1000);
-    dealWithMessage(reciveTransmission());
-  }
+else if (MAINBOARD){
+
+   //ProductNum = 11
+
+  Request toSend;
+
+  toSend.destination[0] = '1';
+  toSend.destination[1] = '1';
+  toSend.destination[2] = '1';
+
+  toSend.device = temp;
+
+  toSend.type = request;
+
+  toSend.additional = 0;
+  
+   sendMessage(createMessage(main, request, toSend));
+
+   delay(5000);
+
+}
+
+else{
+   if(HC12.available() > 8){
+   delay(1000);
+   dealWithMessage(reciveTransmission());
+ }
 }
     
   }
