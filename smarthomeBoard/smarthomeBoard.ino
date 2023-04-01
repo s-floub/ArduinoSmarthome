@@ -60,7 +60,7 @@ else if (MAINBOARD){
 
   toSend.type = request;
 
-  toSend.additional = 0;
+  toSend.additional = (int) (adjust*20);
   
   Message ourMessage = createMessage(main, request, toSend);
 
@@ -68,7 +68,7 @@ else if (MAINBOARD){
    Serial.println(checkMessageValidity(ourMessage));
    sendMessage(ourMessage);
 
-   delay(5000);
+   delay(3000);
 
 }
 
@@ -88,9 +88,12 @@ else{
       Message messageToPrint;
       Dequeue(messageQueue, messageToPrint);
       printMessageToSerialDEBUG(messageToPrint);
+      Serial.print("-----------");
+      Request requestFromMessage = parseRequest(messageToPrint);
+      printRequestToSerialDEBUG(requestFromMessage);
         Serial.print("messageQueue->count ");
   Serial.println(messageQueue->count);
-      delay(10000);
+      delay(7000);
       
     }
   }
