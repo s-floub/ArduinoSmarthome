@@ -3,7 +3,9 @@
 #include "transmission.h"
 #include "config.h"
 #include <Arduino.h>
+#include "messageQueue.h"
 
+int reciveMessageToQueue(pQueue queue);
 
 void dealWithMessage(Message message);
 

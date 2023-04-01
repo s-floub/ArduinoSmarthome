@@ -5,7 +5,7 @@ int changeChannel(int desiredChannel){
 
     if (desiredChannel > 100 || desiredChannel < 1) return RETURN_ERR; //Check if valid Channel
 
-    //Empty Avalible First
+    //Empty Avalible First NEED TO ADD 
 
     char channel[4];
     sprintf(channel, "%03i\0", desiredChannel);

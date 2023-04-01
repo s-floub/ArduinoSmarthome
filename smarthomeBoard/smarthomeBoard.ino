@@ -3,6 +3,7 @@
 #include "boardLogic.h"
 #include "mainBoard.h"
 #include "channels.h"
+#include "messageQueue.h"
 
 // 0: mother, 1: sensor, 2: actuator
 const productType PRODUCTWHAT = sensorBoard;
@@ -11,6 +12,8 @@ const productType PRODUCTWHAT = sensorBoard;
 const char PRODUCTNUM[3] = "11";
 
 SoftwareSerial HC12(HC12TXPIN, HC12RXPIN);
+
+pQueue messageQueue = CreateQueue();
 
 void setup() {
   Serial.begin(9600);             // Serial port to computer
@@ -21,7 +24,7 @@ void setup() {
 
   digitalWrite(HC12SETPIN, HIGH);
 
-  changeChannel(13);
+  changeChannel(DEFAULTCHANNEL);
 }
 
 char readBuffer[100];
