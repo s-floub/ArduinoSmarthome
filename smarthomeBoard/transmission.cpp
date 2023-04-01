@@ -250,7 +250,7 @@ Request parseRequest(Message message){
   String inputBuff = "";
 
   for(int i = 5; message.data.data.strData[i] != '\0' && i < 11; i++){ //11 comes from max length of int with radix 10
-    inputBuff += (char) HC12.read();
+    inputBuff += (char) message.data.data.strData[i];
   }
 
   if(inputBuff != "") toReturn.additional = atoi(inputBuff.c_str());
