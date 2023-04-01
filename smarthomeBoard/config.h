@@ -1,13 +1,25 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-//Used to set paramaters when debugging
+#include <Arduino.h>
+#include "transmission.h"
+
+//Used to set paramaters when debugging / device setup
+
+#define RETURN_OK 0
+#define RETURN_ERR -1
 
 #define PRINTEVERYTHING 0
 #define MAINBOARD 1
 
-#define DEBUG 0
+#define DEBUG 1
 
 #define MESSAGETIMEOUT 3000
+
+#define POTPIN A0
+
+#define HC12TXPIN 10 //Might need to be pwm
+#define HC12RXPIN 11 //Might need to be pwm
+#define HC12SETPIN 12
 
 #endif

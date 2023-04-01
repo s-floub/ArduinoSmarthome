@@ -1,9 +1,8 @@
-#include "config.h"
 #include "transmission.h"
+#include "config.h"
 #include "boardLogic.h"
 #include "mainBoard.h"
-
-#define POTPIN A0
+#include "channels.h"
 
 // 0: mother, 1: sensor, 2: actuator
 const productType PRODUCTWHAT = sensorBoard;
@@ -11,13 +10,18 @@ const productType PRODUCTWHAT = sensorBoard;
 // No meaning besides as identifier
 const char PRODUCTNUM[3] = "11";
 
-SoftwareSerial HC12(10, 11); // HC-12 TX Pin, HC-12 RX Pin
+SoftwareSerial HC12(HC12TXPIN, HC12RXPIN);
 
 void setup() {
   Serial.begin(9600);             // Serial port to computer
   HC12.begin(9600);               // Serial port to HC12
 
   pinMode(POTPIN, INPUT);
+  pinMode(HC12SETPIN, OUTPUT);
+
+  digitalWrite(HC12SETPIN, HIGH);
+
+  changeChannel(13);
 }
 
 char readBuffer[100];
