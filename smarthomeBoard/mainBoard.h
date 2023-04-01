@@ -3,6 +3,16 @@
 #include "transmission.h"
 #endif
 
+#ifndef CONFIG_H
+#define CONFIG_H
+#include "config.h"
+#endif
+
+#ifndef ARDUINO_H
+#define ARDUINO_H
+#include <Arduino.h>
+#endif
+
 typedef struct device{
     productType productWhat; //What product (main, sensor, actuator)
     char productNum[3]; //Unique product identifier
@@ -17,4 +27,6 @@ typedef struct listOfDevices{
 
 Device* createDeviceNode (productType productWhat, char productNum[3], deviceType sensor);
 int insertNode (List ourList, productType productWhat, char productNum[3], deviceType sensor);
-int deleteDevice (int);
+int deleteDevice (List ourList, productType productWhat, char productNum[3], deviceType sensor);
+int compareDevices(Device* first, Device* second);
+int queryList(List list);
