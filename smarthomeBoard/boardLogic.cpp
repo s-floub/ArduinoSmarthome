@@ -1,4 +1,6 @@
 #include "boardLogic.h"
+#include "SensorDataRetrieval.h"
+
 
 extern SoftwareSerial HC12;
 
@@ -65,7 +67,6 @@ void dealWithMessage(Message message){
   }
 
 }
-
 
 void printMessageToSerialDEBUG(Message message){
   if (!DEBUG) return;
