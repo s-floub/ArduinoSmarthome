@@ -9,7 +9,7 @@
 const productType PRODUCTWHAT = sensorBoard;
 
 // No meaning besides as identifier
-const char PRODUCTNUM[3] = "11";
+const char PRODUCTNUM[3] = "12";
 
 SoftwareSerial HC12(HC12TXPIN, HC12RXPIN);
 
@@ -59,7 +59,11 @@ else if (MAINBOARD){
 
   toSend.additional = 0;
   
-   sendMessage(createMessage(main, request, toSend));
+  Message ourMessage = createMessage(main, request, toSend);
+
+   Serial.print("Checkbyte ");
+   Serial.println(checkMessageValidity(ourMessage));
+   sendMessage(ourMessage);
 
    delay(5000);
 
@@ -68,8 +72,12 @@ else if (MAINBOARD){
 else{
    if(HC12.available() > 8){
    delay(1000);
-   dealWithMessage(reciveTransmission());
+   reciveMessageToQueue(messageQueue);
  }
+
+  delay(2000);
+  Serial.print("messageQueue->count ");
+  Serial.println(messageQueue->count);
 }
     
   }

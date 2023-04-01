@@ -16,6 +16,7 @@ int reciveMessageToQueue(pQueue queue){
   }
 
   if(DEBUG) Serial.println("RECIVEDINVALIDMESSAGE");
+  if(DEBUG) Serial.println(checkMessageValidity(theMessage));
   return RETURN_ERR;
 
 }

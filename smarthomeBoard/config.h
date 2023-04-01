@@ -9,13 +9,14 @@
 #define RETURN_ERR -1
 
 #define PRINTEVERYTHING 0
-#define MAINBOARD 1
+#define MAINBOARD 0
 
 #define DEBUG 1
 
 #define MESSAGETIMEOUT 3000
 #define MAXDATASTRINGLEN 30
 #define DEFAULTCHANNEL 13
+#define CHECKSUMDIG 7
 
 #define POTPIN A0
 

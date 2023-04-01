@@ -9,6 +9,7 @@ int checkMessageValidity(Message message){
   sum += (int) message.productNum[2];
   sum += (int) message.sensor;
   sum += (int) message.messageType;
+  sum += (int) message.checkbyte;
   sum += (int) message.data.type;
 
   switch(message.data.type){
@@ -26,9 +27,7 @@ int checkMessageValidity(Message message){
     break;
   }
 
-  sum += (int) message.checkbyte;
-
-  return sum % 7; //7 is arbitary
+  return sum % CHECKSUMDIG; //7 is arbitary
 }
 
 Message createMessage(deviceType sensor, messageType messageType, int data){
@@ -48,7 +47,7 @@ Message createMessage(deviceType sensor, messageType messageType, int data){
   toReturn.data.type = intType;
   toReturn.data.data.intData = data;
 
-  toReturn.checkbyte += checkMessageValidity(toReturn);
+  toReturn.checkbyte += CHECKSUMDIG - checkMessageValidity(toReturn);
 
   return toReturn;
 }
@@ -83,7 +82,7 @@ Message createMessage(deviceType sensor, messageType messageType, char data[]){
   toReturn.data.type = strType; 
   strcpy(toReturn.data.data.strData, data);
 
-  toReturn.checkbyte += checkMessageValidity(toReturn);
+  toReturn.checkbyte += CHECKSUMDIG - checkMessageValidity(toReturn);
 
   return toReturn;
 }
@@ -105,7 +104,7 @@ Message createMessage(deviceType sensor, messageType messageType, float data){
   toReturn.data.type = floatType;
   toReturn.data.data.floatData = data;
 
-  toReturn.checkbyte += checkMessageValidity(toReturn);
+  toReturn.checkbyte += CHECKSUMDIG - checkMessageValidity(toReturn);
 
   return toReturn;
 }
