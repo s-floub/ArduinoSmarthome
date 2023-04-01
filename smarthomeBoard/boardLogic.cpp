@@ -5,12 +5,12 @@ extern SoftwareSerial HC12;
 void dealWithMessage(Message message){
 
   if(DEBUG){
-    HC12.print("message.messageType");
-    HC12.println(message.messageType);
-    HC12.print("message.productNum");
-    HC12.println(message.productNum);
-    HC12.print("message.productWhat");
-    HC12.println(message.productWhat);
+    Serial.print("message.messageType");
+    Serial.println(message.messageType);
+    Serial.print("message.productNum");
+    Serial.println(message.productNum);
+    Serial.print("message.productWhat");
+    Serial.println(message.productWhat);
   }
 
   switch(PRODUCTWHAT){
