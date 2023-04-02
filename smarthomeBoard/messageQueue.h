@@ -2,6 +2,7 @@
 #define MESSAGEQUEUE_H
 #include "transmission.h"
 
+//Queue function definitions are more or less taken from MREN 178 lab 2
 
 typedef struct qItem	{   //struct of items to add to linked list implimented queue
 	struct qItem	*next;  //Next item in the queue

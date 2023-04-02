@@ -1,20 +1,24 @@
 #include "boardLogic.h"
 #include "SensorDataRetrieval.h"
 
-
 extern SoftwareSerial HC12;
 
 int reciveMessageToQueue(pQueue queue){
 
-  if(HC12.available() < 6 ) return RETURN_ERR;
+  //Check that there is enough data for a message to be possible
+  if(HC12.available() <= MINMESSAGELEN) return RETURN_ERR;
+
+  //delay to allow new HC12 data to come in
+  delay(100);
 
   Message theMessage = reciveTransmission();
 
+  //Check if message is valid (not corrupted)
   if(!checkMessageValidity(theMessage)) {
 
+    //If valid add to queue
     Enqueue(queue, CreateItem(theMessage));
     return RETURN_OK;
-
   }
 
   if(DEBUG) Serial.println("RECIVEDINVALIDMESSAGE");
@@ -26,11 +30,11 @@ int reciveMessageToQueue(pQueue queue){
 void dealWithMessage(Message message){
 
   if(DEBUG){
-    Serial.print("message.messageType");
+    Serial.print("message.messageType ");
     Serial.println(message.messageType);
-    Serial.print("message.productNum");
+    Serial.print("message.productNum ");
     Serial.println(message.productNum);
-    Serial.print("message.productWhat");
+    Serial.print("message.productWhat ");
     Serial.println(message.productWhat);
   }
 
@@ -46,6 +50,13 @@ void dealWithMessage(Message message){
         whoIAm[2] = PRODUCTNUM[1];
         whoIAm[3] = '\0';
 
+        if(DEBUG) {
+          Serial.print("whoIAm: ");
+          Serial.println(whoIAm);
+          Serial.print("destination ");
+          Serial.println(theRequest.destination);
+        }
+
         if(!strcmp(theRequest.destination, whoIAm)){ //Check if I am being requested
           sendMessage(createMessage(message.sensor, pureData, 100)); 
         }
@@ -59,6 +70,9 @@ void dealWithMessage(Message message){
     case mainBoard:
       //If Data write to log file
       //If error write to other log file
+
+      printMessageToSerialDEBUG(message);
+
       break;
 
     default:
@@ -108,4 +122,20 @@ void printMessageToSerialDEBUG(Message message){
     }
  Serial.println("message.endChar");
     Serial.write(message.endChar);
+}
+
+
+
+void printRequestToSerialDEBUG(Request request){
+  if (!DEBUG) return;
+
+  Serial.println("request.destination");
+  Serial.write(request.destination);
+   Serial.println("request.device");
+  Serial.write(request.device);
+   Serial.println("request.type");
+  Serial.write(request.type);
+   Serial.println("request.additional");
+  Serial.print((int) request.additional);
+
 }

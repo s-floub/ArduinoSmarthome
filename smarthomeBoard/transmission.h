@@ -99,7 +99,7 @@ typedef struct message{ //Message, recived or to be sent
     const char endChar = '\n'; //End charachter of ALL messages
 
     //Manual assignment of assignment operator
-    //I think the reason this is required is because productNum is a string
+    //This is required to to productNum being a string and the Data type
     void operator=(const struct message& mes)
     {
       productWhat = mes.productWhat;
@@ -133,7 +133,7 @@ Message createMessage(deviceType device, messageType messageType, Request reques
 void sendMessage(Message message);
 
 //Recives transmission from HC12 and parces it into a Message
-//Only call if enough avalable chars ie HC12.avalible() > 9
+//Only call if enough avalable chars ie HC12.avalible() > MINMESSAGELEN
 //Does not check for errors or invalid messages in this function
 Message reciveTransmission();
 

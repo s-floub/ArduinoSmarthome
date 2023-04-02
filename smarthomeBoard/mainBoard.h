@@ -4,6 +4,7 @@
 #include "transmission.h"
 #include "config.h"
 #include <Arduino.h>
+#include "boardLogic.h"
 
 typedef struct device{
     productType productWhat; //What product (main, sensor, actuator)
@@ -13,14 +14,30 @@ typedef struct device{
 } Device;
 
 typedef struct listOfDevices{
-    Device* head;
-    Device* tail;
-} List;
+    Device* head = NULL;
+    Device* tail = NULL;
+} List, *pList;
 
+// Initialise and return empty List pointer
+pList initialiseList();
+
+// Create a new Device node
 Device* createDeviceNode (productType productWhat, char productNum[3], deviceType sensor);
-int insertNode (List ourList, productType productWhat, char productNum[3], deviceType sensor);
-int deleteDevice (List ourList, productType productWhat, char productNum[3], deviceType sensor);
+
+// Inserts Device node at end of list
+int insertNode (pList ourList, productType productWhat, char productNum[3], deviceType sensor);
+
+//NEEDS TESTING
+// Finds Device that matches values and remove that node from the list
+int deleteDevice (pList ourList, productType productWhat, char productNum[3], deviceType sensor);
+
+//Compares two Device pointers, returns 0 if same
 int compareDevices(Device* first, Device* second);
-int queryList(List list);
+
+//Sends request to device, waits for return, and parses return with dealWithMessage()
+int queryDevice(Device* pDevice, pQueue messageQueue);
+
+//query all Devices in list
+int queryList(pList list, pQueue messageQueue);
 
 #endif

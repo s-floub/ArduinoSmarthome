@@ -3,6 +3,7 @@
 int checkMessageValidity(Message message){
   int sum = 0;
 
+  //Add all message feild values to sum
   sum += (int) message.productWhat;
   sum += (int) message.productNum[0];
   sum += (int) message.productNum[1];
@@ -14,12 +15,15 @@ int checkMessageValidity(Message message){
 
   switch(message.data.type){
     case intType:
+        //if int, add int value
         sum += (int) message.data.data.intData;
     break;
     case floatType:
+        //if float, add float value but truncated to int (no decimals)
         sum += (int) message.data.data.floatData;
     break;
     case strType:
+        //if string, add length of string
         sum += (int) (strlen(message.data.data.strData));
     break;
     default:
@@ -27,7 +31,8 @@ int checkMessageValidity(Message message){
     break;
   }
 
-  return sum % CHECKSUMDIG; //7 is arbitary
+  //return the sum mouloed with the CHECKSUMDIG
+  return sum % CHECKSUMDIG;
 }
 
 Message createMessage(deviceType sensor, messageType messageType, int data){
@@ -47,6 +52,7 @@ Message createMessage(deviceType sensor, messageType messageType, int data){
   toReturn.data.type = intType;
   toReturn.data.data.intData = data;
 
+  //Add to checkbyte to verify message matches checkMessageValiditySpecifications
   toReturn.checkbyte += CHECKSUMDIG - checkMessageValidity(toReturn);
 
   return toReturn;
@@ -82,6 +88,7 @@ Message createMessage(deviceType sensor, messageType messageType, char data[]){
   toReturn.data.type = strType; 
   strcpy(toReturn.data.data.strData, data);
 
+  //Add to checkbyte to verify message matches checkMessageValiditySpecifications
   toReturn.checkbyte += CHECKSUMDIG - checkMessageValidity(toReturn);
 
   return toReturn;
@@ -104,6 +111,7 @@ Message createMessage(deviceType sensor, messageType messageType, float data){
   toReturn.data.type = floatType;
   toReturn.data.data.floatData = data;
 
+  //Add to checkbyte to verify message matches checkMessageValiditySpecifications
   toReturn.checkbyte += CHECKSUMDIG - checkMessageValidity(toReturn);
 
   return toReturn;
@@ -169,7 +177,8 @@ void sendMessage(Message message){
 
 }
 
-Message reciveTransmission(){ //Only call if enough avalable chars ie HC12.avalible() > 9
+Message reciveTransmission(){ 
+  //Only call if enough avalable chars ie HC12.avalible() > MINMESSAGELEN
   //Recives transmission from HC12 and parces it into a Message
   //Does not check for errors or invalid messages in this function
 
@@ -189,16 +198,19 @@ Message reciveTransmission(){ //Only call if enough avalable chars ie HC12.avali
 
   String inputBuff = "";
 
+  //Read all data into buffer
   while(HC12.available() && HC12.peek() != '\n'){
     inputBuff += (char) HC12.read();
   }
 
     switch(toReturn.data.type){
         case intType:
+            //convert c++ string to int
             toReturn.data.data.intData = atoi(inputBuff.c_str());
         break;
 
         case floatType:
+            //convert c++ string to float
             toReturn.data.data.floatData = atof(inputBuff.c_str());
         break;
 
@@ -218,6 +230,7 @@ Message reciveTransmission(){ //Only call if enough avalable chars ie HC12.avali
             }
 
             else{
+              //string copy original if was not too long
               strcpy(toReturn.data.data.strData, inputBuff.c_str());
             }
 
@@ -247,13 +260,17 @@ Request parseRequest(Message message){
 
   toReturn.device = (deviceType) message.data.data.strData[4];
 
+  //Take in .additional section
   String inputBuff = "";
 
   for(int i = 5; message.data.data.strData[i] != '\0' && i < 11; i++){ //11 comes from max length of int with radix 10
-    inputBuff += (char) HC12.read();
+    inputBuff += (char) message.data.data.strData[i];
   }
 
+  //if inputBuff is changed, change c++ String to int and assign to .additional
   if(inputBuff != "") toReturn.additional = atoi(inputBuff.c_str());
+
+  //If imputBuff was unchanged, .additional would keep default value of 0
 
   return toReturn;
 }
