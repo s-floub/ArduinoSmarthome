@@ -5,7 +5,10 @@ int changeChannel(int desiredChannel){
 
     if (desiredChannel > 100 || desiredChannel < 1) return RETURN_ERR; //Check if valid Channel
 
-    //Empty Avalible First NEED TO ADD 
+    //Empty avalible chars in HC12, if not done will cause errors 
+    while(HC12.available()){
+      HC12.read();
+    }
 
     //convert channel int to string with leading zeros
     char channel[4];
