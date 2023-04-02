@@ -26,11 +26,11 @@ int reciveMessageToQueue(pQueue queue){
 void dealWithMessage(Message message){
 
   if(DEBUG){
-    Serial.print("message.messageType");
+    Serial.print("message.messageType ");
     Serial.println(message.messageType);
-    Serial.print("message.productNum");
+    Serial.print("message.productNum ");
     Serial.println(message.productNum);
-    Serial.print("message.productWhat");
+    Serial.print("message.productWhat ");
     Serial.println(message.productWhat);
   }
 
@@ -46,6 +46,13 @@ void dealWithMessage(Message message){
         whoIAm[2] = PRODUCTNUM[1];
         whoIAm[3] = '\0';
 
+        if(DEBUG) {
+          Serial.print("whoIAm: ");
+          Serial.println(whoIAm);
+          Serial.print("destination ");
+          Serial.println(theRequest.destination);
+        }
+
         if(!strcmp(theRequest.destination, whoIAm)){ //Check if I am being requested
           sendMessage(createMessage(message.sensor, pureData, 100)); 
         }
@@ -59,6 +66,9 @@ void dealWithMessage(Message message){
     case mainBoard:
       //If Data write to log file
       //If error write to other log file
+
+      printMessageToSerialDEBUG(message);
+
       break;
 
     default:
