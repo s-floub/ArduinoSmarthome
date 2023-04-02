@@ -172,19 +172,24 @@ int queryDevice(Device* pDevice, pQueue messageQueue){
     //Log when sent (relative to Arduino running time so far)
     int sentTime = millis();
 
-    //While waiting for return message
-    while(sentTime - millis() < MESSAGETIMEOUT && HC12.available() < MINMESSAGELEN){
+    //While waiting for return message(s)
+    while(millis() - sentTime < MESSAGETIMEOUT && HC12.available() < MINMESSAGELEN){
         delay(100);
-        if(DEBUG) Serial.println("...");
+        if(DEBUG) Serial.println(F("..."));
     }
 
     //While there are messages avalible, recive those messages to our queue
     while (HC12.available() >= MINMESSAGELEN){
-        reciveMessageToQueue(messageQueue);
+        if(DEBUG) Serial.println(F("Reciving Message"));
+        if (reciveMessageToQueue(messageQueue) == RETURN_ERR) {
+            if(DEBUG) Serial.println(F("Breaking Loop"));
+            break;
+        }
     }
 
     //Read all messages in the queue
     while(messageQueue->count > 0){
+        if(DEBUG) Serial.println(F("Processing Message"));
         Message incomingMessage;
         Dequeue(messageQueue, incomingMessage);
         dealWithMessage(incomingMessage);
@@ -223,15 +228,19 @@ int queryList(pList list, pQueue messageQueue){
         delay(300);
     }
 
+    if(DEBUG) Serial.println(F("Messages Returned"));
+    if(DEBUG) Serial.println(messagesReturned);
     return messagesReturned;
 }
 
 int outputToSerialInPythonFormat(Message message){
     if(message.productWhat == sensorBoard){
         Serial.print(message.productNum);
-        Serial.print(message.sensor);
+        Serial.print((char) message.sensor);
         Serial.print('-');
-        if(message.data.type == intType) Serial.print(message.data.data.intData);
+        if(message.data.type == intType) {
+            Serial.print(message.data.data.intData);
+        }
         else {
             Serial.print("not an int");
             Serial.print('\n');
