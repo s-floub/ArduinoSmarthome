@@ -4,6 +4,7 @@
 #include "mainBoard.h"
 #include "channels.h"
 #include "messageQueue.h"
+#include "actuateMotors.h"
 
 // 0: mother, 1: sensor, 2: actuator
 productType PRODUCTWHAT;
@@ -44,7 +45,6 @@ int adjust = 0;
 int runOnce = 0;
 
 void loop() {
-
 
   if(PRINTEVERYTHING){
   while (HC12.available()) {        // If HC-12 has data
