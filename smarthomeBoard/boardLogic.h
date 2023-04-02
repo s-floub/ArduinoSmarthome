@@ -4,6 +4,7 @@
 #include "config.h"
 #include <Arduino.h>
 #include "messageQueue.h"
+#include "mainBoard.h"
 
 //Queues message from HC12 to the queue provided
 int reciveMessageToQueue(pQueue queue);

@@ -15,6 +15,7 @@ char PRODUCTNUM[3];
 SoftwareSerial HC12(HC12TXPIN, HC12RXPIN);
 
 pQueue messageQueue = CreateQueue();
+pQueue errorQueue = CreateQueue();
 
 pList devicesList = initialiseList();
 
@@ -46,81 +47,35 @@ int runOnce = 0;
 
 void loop() {
 
-  if(PRINTEVERYTHING){
-  while (HC12.available()) {        // If HC-12 has data
-    //Serial.write("got somthign\n");
-   
-      Serial.write(HC12.read());
 
+  if(PRINTEVERYTHING && DEBUG){
+  while (HC12.available()) {        // If HC-12 has data
+      Serial.write(HC12.read());
       };      // Send the data to Serial 
+    }
+
+  else if (MAINBOARD){
+
+    queryList(devicesList, messageQueue);
+
+    delay(10000);
+
+  }
+
+  else{
+    delay(1000);
+
+     if(HC12.available() > MINMESSAGELEN){
+     delay(1000);
+     reciveMessageToQueue(messageQueue);
       }
 
-   /* while (HC12.available()) {             // If HC-12 has data
-      char incomingByte = HC12.read();          // Store each icoming byte from HC-12
-      strncat(readBuffer, char(incomingByte), 1);    // Add each byte to ReadBuffer string variable
-    }*/
-else if (MAINBOARD){
+      if(messageQueue->count > 0){
+      Message theMessage;
+      Dequeue(messageQueue, theMessage);
+      dealWithMessage(theMessage);
+      }
 
-   //ProductNum = 11
-
-  queryList(devicesList, messageQueue);
-/*
-  adjust++;
-
-  Request toSend;
-
-  toSend.destination[0] = '0' + (adjust % 8);
-  toSend.destination[1] = '1';
-  toSend.destination[2] = '1';
-
-  toSend.device = temp;
-
-  toSend.type = request;
-
-  toSend.additional = (int) (adjust*20);
-  
-  Message ourMessage = createMessage(main, request, toSend);
-
-   Serial.print("Checkbyte ");
-   Serial.println(checkMessageValidity(ourMessage));
-   sendMessage(ourMessage);*/
-
-   delay(10000);
-
-}
-
-else{
-  delay(1000);
-
-   if(HC12.available() > MINMESSAGELEN){
-   delay(1000);
-   reciveMessageToQueue(messageQueue);
- }
-
- if(messageQueue->count > 0){
-  Message theMessage;
-  Dequeue(messageQueue, theMessage);
-  dealWithMessage(theMessage);
- }
-/*
-  delay(2000);
-  Serial.print("messageQueue->count ");
-  Serial.println(messageQueue->count);
-}
-
-  if(messageQueue->count > 10){
-    while(messageQueue->count > 0){
-      Message messageToPrint;
-      Dequeue(messageQueue, messageToPrint);
-      printMessageToSerialDEBUG(messageToPrint);
-      Serial.print("-----------");
-      Request requestFromMessage = parseRequest(messageToPrint);
-      printRequestToSerialDEBUG(requestFromMessage);
-        Serial.print("messageQueue->count ");
-  Serial.println(messageQueue->count);
-      delay(7000);
-      
-    }*/
   }
+}
     
-  }

@@ -17,13 +17,13 @@ void initProduct();
 
 //Debugging defines
 #define PRINTEVERYTHING 0
-#define MAINBOARD 0
+#define MAINBOARD 1
 
 #define DEBUG 1
 
 //Changeable constants
 #define MESSAGETIMEOUT 3000
-#define MAXDATASTRINGLEN 30
+#define MAXDATASTRINGLEN 30 //Must be at least 14 to correctly handle error messages
 #define DEFAULTCHANNEL 13
 #define CHECKSUMDIG 7 //Should be a prime number less than 78
 
@@ -39,9 +39,9 @@ void initProduct();
 #define HC12SETPIN 12
 
 // 0: mother, 1: sensor, 2: actuator
-const productType whatProduct = sensorBoard;
+const productType whatProduct = mainBoard;
 
 // No meaning besides as identifier
-const char numberProduct[3] = "11";
+const char numberProduct[3] = "00";
 
 #endif

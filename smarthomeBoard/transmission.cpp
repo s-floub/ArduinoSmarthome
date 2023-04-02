@@ -63,7 +63,7 @@ Message createMessage(deviceType sensor, messageType messageType, char data[]){
 
   if(strlen(data) > MAXDATASTRINGLEN - 1){ //Check if string is longer than allowable length
 
-    if(DEBUG) Serial.println("data too long for message, truncating (CREATEMESSAGE)");
+    if(DEBUG) Serial.println(F("data too long for message, truncating (CREATEMESSAGE)"));
 
     //Create new string of correct length 
     char shortenedStr[MAXDATASTRINGLEN];
@@ -218,7 +218,7 @@ Message reciveTransmission(){
             //Check if string is too long
             if(strlen(inputBuff.c_str()) > MAXDATASTRINGLEN - 1){
               
-              if(DEBUG) Serial.println("data too long for message, truncating (RECIVETRANMISSION)");
+              if(DEBUG) Serial.println(F("data too long for message, truncating (RECIVETRANMISSION)"));
 
               //Create new string of correct length 
               char shortenedStr[MAXDATASTRINGLEN];

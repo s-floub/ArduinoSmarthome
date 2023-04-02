@@ -7,7 +7,7 @@ extern SoftwareSerial HC12;
 int reciveMessageToQueue(pQueue queue){
 
   //Check that there is enough data for a message to be possible
-  if(HC12.available() <= MINMESSAGELEN) return RETURN_ERR;
+  if(HC12.available() < MINMESSAGELEN) return RETURN_ERR;
 
   //delay to allow new HC12 data to come in
   delay(100);
@@ -37,6 +37,8 @@ void dealWithMessage(Message message){
     Serial.println(message.productNum);
     Serial.print("message.productWhat ");
     Serial.println(message.productWhat);
+    Serial.print("message.sensor ");
+    Serial.println(message.sensor);
   }
 
   switch(PRODUCTWHAT){
@@ -59,7 +61,7 @@ void dealWithMessage(Message message){
         }
 
         if(!strcmp(theRequest.destination, whoIAm)){ //Check if I am being requested
-          sendMessage(createMessage(message.sensor, pureData, getSensorData(theRequest.device))); 
+          sendMessage(createMessage(theRequest.device, pureData, getSensorData(theRequest.device))); 
         }
       }
       break;
@@ -93,7 +95,8 @@ void dealWithMessage(Message message){
       //If Data write to log file
       //If error write to other log file
 
-      printMessageToSerialDEBUG(message);
+      //printMessageToSerialDEBUG(message);
+      outputToSerialInPythonFormat(message);
 
 
       break;
