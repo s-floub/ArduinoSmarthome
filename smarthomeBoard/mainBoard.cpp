@@ -1,10 +1,18 @@
 #include "mainBoard.h"
 
 
+pList initialiseList(){
+    pList list = (pList) malloc(sizeof(List));
+    list->head = NULL;
+    list->tail = NULL;
+
+    return list;
+}
+
 // Function to create a new node
 Device* createDeviceNode (productType productWhat, char productNum[3], deviceType sensor) {
     // Declaration of local node pointer, with mem allocation
-    Device *p_new = (Device*) malloc (sizeof (Device));
+    Device *p_new = (Device *) malloc (sizeof (Device));
 
     if (p_new != NULL) {
         // Now fill with data. Notice the syntax. You can read this as "assign 
@@ -13,11 +21,22 @@ Device* createDeviceNode (productType productWhat, char productNum[3], deviceTyp
 
         p_new->productNum[0] = productNum[0];
         p_new->productNum[1] = productNum[1];
+        p_new->productNum[2] = '\0';
 
         p_new->sensor = sensor;
 
-        p_new->pNextDevice = NULL; 
+        p_new->pNextDevice = NULL;
+
+        if(DEBUG) Serial.println("Device Init");
+        if(DEBUG) Serial.print("p_new->productWhat ");
+        if(DEBUG) Serial.println((char) p_new->productWhat);
+        if(DEBUG) Serial.print("p_new->productNum ");
+        if(DEBUG) Serial.println(p_new->productNum);
+        if(DEBUG) Serial.print("p_new->sensor ");
+        if(DEBUG) Serial.println((char) p_new->sensor);
+
     }
+
     
     // Get here with pn pointing to a filled-in structure, or with p_new equal
     // to NULL because malloc() failed. In either case, return p_new.
@@ -26,28 +45,32 @@ Device* createDeviceNode (productType productWhat, char productNum[3], deviceTyp
 
 
 // Function to insert node at front of the list
-int insertNode (List ourList, productType productWhat, char productNum[3], deviceType sensor){  //Function from Lab 1
+int insertNode (pList ourList, productType productWhat, char productNum[3], deviceType sensor){  //Function from Lab 1
 
     Device *p_new = createDeviceNode (productWhat, productNum, sensor);
     // Make sure node creation worked
 
     if (p_new == NULL) {
+        if(DEBUG) Serial.println("p_new == NULL");
         return -1;
     }
     // New node goes at back of list. If the list is currently empty,
     // then both the head and back pointers need to be updated.
 
-    if (ourList.head == NULL) {
-          ourList.head = p_new;
-          ourList.tail = p_new;
+    if (ourList->head == NULL) {
+          ourList->head = p_new;
+          ourList->tail = p_new;
+          if(DEBUG) Serial.println("INSERTED AT HEAD AND TAIL");
           return 0;
     }
     // If list is empty, inserting at tail is same as at head
 
-    ourList.tail->pNextDevice = p_new;
-    ourList.tail = p_new;
+    ourList->tail->pNextDevice = p_new;
+    ourList->tail = p_new;
     // Point the old tail to our new Node, then point the tail pointer to the new Node
   
+        if(DEBUG) Serial.println("Device Inserted");
+
     return 0;
 }
 
@@ -55,12 +78,12 @@ int insertNode (List ourList, productType productWhat, char productNum[3], devic
 // Find node that holds the value val, and remove the node from the list, 
 // without breaking the list of course. Returns ITEM_ERROR if the number 
 // could not be found, and EXIT_OK if the item was found and deleted.
-int deleteDevice (List ourList, productType productWhat, char productNum[3], deviceType sensor) {
+int deleteDevice (pList ourList, productType productWhat, char productNum[3], deviceType sensor) {
     Device *p_temp;
     Device *p_node;
 
-    p_temp = ourList.head;   // pointer to first node
-    p_node = ourList.head->pNextDevice; // pointer to pointer that points to first node
+    p_temp = ourList->head;   // pointer to first node
+    p_node = ourList->head->pNextDevice; // pointer to pointer that points to first node
 
     Device p_compare;
 
@@ -73,8 +96,8 @@ int deleteDevice (List ourList, productType productWhat, char productNum[3], dev
 
     p_compare.pNextDevice = NULL; 
 
-    if(!compareDevices(ourList.head, &p_compare)){
-      ourList.head = p_node;
+    if(!compareDevices(ourList->head, &p_compare)){
+      ourList->head = p_node;
       free(p_temp);
       return 0;
     }
@@ -93,8 +116,8 @@ int deleteDevice (List ourList, productType productWhat, char productNum[3], dev
            // delete the only item in the list. Handle each of these cases. 
             
 
-           if(p_node == ourList.tail){
-            ourList.tail = p_temp;
+           if(p_node == ourList->tail){
+            ourList->tail = p_temp;
             // point tail pointer to Node before
            }
 
@@ -127,42 +150,74 @@ int compareDevices(Device* first, Device* second){
 
 }
 
-int queryDevice(Device* device){
+int queryDevice(Device* pDevice, pQueue messageQueue){
+
+        if(DEBUG) Serial.println("Device Query");
+        if(DEBUG) Serial.print("pDevice->productWhat ");
+        if(DEBUG) Serial.println((char) pDevice->productWhat);
+        if(DEBUG) Serial.print("pDevice->productNum ");
+        if(DEBUG) Serial.println(pDevice->productNum);
+        if(DEBUG) Serial.print("pDevice->sensor ");
+        if(DEBUG) Serial.println((char) pDevice->sensor);
+
     Request ourRequest;
 
     ourRequest.type = request;
 
-    ourRequest.destination[0] = device->productWhat;
-    ourRequest.destination[1] = device->productNum[0];
-    ourRequest.destination[2] = device->productNum[1];
+    ourRequest.destination[0] = (char) pDevice->productWhat;
+    ourRequest.destination[1] = (char) pDevice->productNum[0];
+    ourRequest.destination[2] = (char) pDevice->productNum[1];
     ourRequest.destination[3] = '\0';
 
-    ourRequest.device = device->sensor;
+    ourRequest.device = pDevice->sensor;
+
+    if(DEBUG) Serial.print("Sending destination ");
+    if(DEBUG) Serial.println(ourRequest.destination);
 
     sendMessage(createMessage(main, request, ourRequest));
     int sentTime = millis();
 
-    while(sentTime - millis() < MESSAGETIMEOUT && HC12.available() < 8){ //While waiting for return message
+       // if(DEBUG) Serial.println("First While loop");
+
+    while(sentTime - millis() < MESSAGETIMEOUT && HC12.available() < MINMESSAGELEN){ //While waiting for return message
         delay(100);
     }
 
-    if (HC12.available() >= 8){
-        //Fill up queue and process all Messages in Queue
+      //  if(DEBUG) Serial.println("Second While loop");
+
+    while (HC12.available() >= MINMESSAGELEN){
+        reciveMessageToQueue(messageQueue);
     }
+
+      //  if(DEBUG) Serial.println("Third While loop");
+
+    while(messageQueue->count > 0){
+        Message incomingMessage;
+        Dequeue(messageQueue, incomingMessage);
+        dealWithMessage(incomingMessage);
+    }
+
+        if(DEBUG) Serial.println("Query Done");
+
+    return 1;
 
 }
 
-int queryList(List list){
+int queryList(pList list, pQueue messageQueue){
     
-    Device* device = list.head;
+    Device* pDevice = list->head;
 
     int nodesReturned = 0;
 
-    while(device != NULL){
-        queryDevice(device);
+    if(DEBUG) Serial.println("Function Called");
+
+    while(pDevice != NULL){
+
+        if(DEBUG) Serial.println("Sending Query");
+        queryDevice(pDevice, messageQueue);
 
         nodesReturned++;
-        device = device->pNextDevice;
+        pDevice = pDevice->pNextDevice;
         delay(250);
     }
 
