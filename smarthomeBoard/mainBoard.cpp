@@ -175,6 +175,7 @@ int queryDevice(Device* pDevice, pQueue messageQueue){
     //While waiting for return message
     while(sentTime - millis() < MESSAGETIMEOUT && HC12.available() < MINMESSAGELEN){
         delay(100);
+        if(DEBUG) Serial.println("...");
     }
 
     //While there are messages avalible, recive those messages to our queue
