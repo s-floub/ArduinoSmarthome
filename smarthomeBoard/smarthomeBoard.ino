@@ -9,11 +9,13 @@
 const productType PRODUCTWHAT = sensorBoard;
 
 // No meaning besides as identifier
-const char PRODUCTNUM[3] = "12";
+const char PRODUCTNUM[3] = "11";
 
 SoftwareSerial HC12(HC12TXPIN, HC12RXPIN);
 
 pQueue messageQueue = CreateQueue();
+
+pList devicesList = initialiseList();
 
 void setup() {
   Serial.begin(9600);             // Serial port to computer
@@ -25,12 +27,21 @@ void setup() {
   digitalWrite(HC12SETPIN, HIGH);
 
   changeChannel(DEFAULTCHANNEL);
+
+  insertNode(devicesList, sensorBoard, "11", pot);
+  insertNode(devicesList, sensorBoard, "02", humid);
+  insertNode(devicesList, sensorBoard, "03", temp);
+
 }
 
 char readBuffer[100];
 int adjust = 0;
 
+int runOnce = 0;
+
 void loop() {
+
+
   if(PRINTEVERYTHING){
   while (HC12.available()) {        // If HC-12 has data
     //Serial.write("got somthign\n");
@@ -48,6 +59,8 @@ else if (MAINBOARD){
 
    //ProductNum = 11
 
+  queryList(devicesList, messageQueue);
+/*
   adjust++;
 
   Request toSend;
@@ -66,18 +79,26 @@ else if (MAINBOARD){
 
    Serial.print("Checkbyte ");
    Serial.println(checkMessageValidity(ourMessage));
-   sendMessage(ourMessage);
+   sendMessage(ourMessage);*/
 
-   delay(3000);
+   delay(10000);
 
 }
 
 else{
-   if(HC12.available() > 8){
+  delay(1000);
+
+   if(HC12.available() > MINMESSAGELEN){
    delay(1000);
    reciveMessageToQueue(messageQueue);
  }
 
+ if(messageQueue->count > 0){
+  Message theMessage;
+  Dequeue(messageQueue, theMessage);
+  dealWithMessage(theMessage);
+ }
+/*
   delay(2000);
   Serial.print("messageQueue->count ");
   Serial.println(messageQueue->count);
@@ -95,7 +116,7 @@ else{
   Serial.println(messageQueue->count);
       delay(7000);
       
-    }
+    }*/
   }
     
   }
