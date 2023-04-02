@@ -14,6 +14,7 @@ char PRODUCTNUM[3];
 SoftwareSerial HC12(HC12TXPIN, HC12RXPIN);
 
 pQueue messageQueue = CreateQueue();
+pQueue errorQueue = CreateQueue();
 
 pList devicesList = initialiseList();
 

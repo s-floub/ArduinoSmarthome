@@ -8,14 +8,16 @@ enum productType{ //Board type used to determine the functionallity of a board
 };
 
 enum deviceType{ //Identifiers for devices, both sensors and actuators
-  main = '!',
+  main, exception = '!',
 
   photo = '1', //Photoresistor, Sensor
   pot = '2', //Potentiomiter, Sensor
   temp = '3', //Tempature, Sensor
   humid = '4', //Humidity, Sensor
 
-  servo = 's' //Servomotor, Actuator
+  servo = 's', //Servomotor, Actuator
+
+  errors = 'e' //Errors stored on the board, not sent immideitly to avoid message clashing
 };
 
 enum messageType{ //Identifier for type of message
@@ -34,6 +36,16 @@ enum dataType{ //Data Type
   intType = 'i', 
   strType = 's', //c strings, not String
   floatType = 'f',
+};
+
+enum errorType{
+    success = 100,
+    theseAreNotTheErrorsYoureLookingFor = 123,
+    invalidTransmission = 111,
+    noResponce = 222,
+    invalidServoValue = 333,
+    deviceNotExist = 444,
+    recivedTransmissionFromSelf = 555
 };
 
 #endif
