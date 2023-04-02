@@ -1,12 +1,13 @@
 #include "channels.h"
 
-//Function adapted from www.HowToMechatronics.com
+
 int changeChannel(int desiredChannel){
 
     if (desiredChannel > 100 || desiredChannel < 1) return RETURN_ERR; //Check if valid Channel
 
     //Empty Avalible First NEED TO ADD 
 
+    //convert channel int to string with leading zeros
     char channel[4];
     sprintf(channel, "%03i\0", desiredChannel);
 
@@ -21,14 +22,15 @@ int changeChannel(int desiredChannel){
 
     String inputBuffer = "";
     
-    while (HC12.available()) {           // If HC-12 has data (the AT Command response)
-      inputBuffer += (char) HC12.read();         // Send the data to Serial monitor
+    while (HC12.available()) {                   // If HC-12 has data (the AT Command response)
+      inputBuffer += (char) HC12.read();         //Add incoming chars to inputBuffer
     }
 
-    Serial.print("Channel changed, ");
-    Serial.println(inputBuffer);
-    digitalWrite(HC12SETPIN, HIGH);          // Exit AT Command mode
+    if(DEBUG) Serial.print("Channel changed, "); 
+    if(DEBUG) Serial.println(inputBuffer);
+    digitalWrite(HC12SETPIN, HIGH);               // Exit AT Command mode
 
+    //Verify that channel was changed correctly
     char toCheck[8];
     toCheck[0] = '\0';
     strcpy(toCheck, toSend);

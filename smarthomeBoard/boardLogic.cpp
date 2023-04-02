@@ -1,20 +1,24 @@
 #include "boardLogic.h"
 #include "SensorDataRetrieval.h"
 
-
 extern SoftwareSerial HC12;
 
 int reciveMessageToQueue(pQueue queue){
 
-  if(HC12.available() < 6 ) return RETURN_ERR;
+  //Check that there is enough data for a message to be possible
+  if(HC12.available() <= MINMESSAGELEN) return RETURN_ERR;
+
+  //delay to allow new HC12 data to come in
+  delay(100);
 
   Message theMessage = reciveTransmission();
 
+  //Check if message is valid (not corrupted)
   if(!checkMessageValidity(theMessage)) {
 
+    //If valid add to queue
     Enqueue(queue, CreateItem(theMessage));
     return RETURN_OK;
-
   }
 
   if(DEBUG) Serial.println("RECIVEDINVALIDMESSAGE");

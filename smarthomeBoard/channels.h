@@ -8,6 +8,9 @@
 
 extern SoftwareSerial HC12;
 
+//Change channel to specified Channel
+//Possible channels 001-100
+//Function adapted from www.HowToMechatronics.com
 int changeChannel(int desiredChannel);
 
 #endif

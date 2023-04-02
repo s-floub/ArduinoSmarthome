@@ -18,12 +18,26 @@ typedef struct listOfDevices{
     Device* tail = NULL;
 } List, *pList;
 
+// Initialise and return empty List pointer
 pList initialiseList();
+
+// Create a new Device node
 Device* createDeviceNode (productType productWhat, char productNum[3], deviceType sensor);
+
+// Inserts Device node at end of list
 int insertNode (pList ourList, productType productWhat, char productNum[3], deviceType sensor);
+
+//NEEDS TESTING
+// Finds Device that matches values and remove that node from the list
 int deleteDevice (pList ourList, productType productWhat, char productNum[3], deviceType sensor);
+
+//Compares two Device pointers, returns 0 if same
 int compareDevices(Device* first, Device* second);
+
+//Sends request to device, waits for return, and parses return with dealWithMessage()
 int queryDevice(Device* pDevice, pQueue messageQueue);
+
+//query all Devices in list
 int queryList(pList list, pQueue messageQueue);
 
 #endif
