@@ -26,12 +26,12 @@ Device* createDeviceNode (productType productWhat, char productNum[3], deviceTyp
 
         p_new->pNextDevice = NULL;
 
-        if(DEBUG) Serial.println("Device Init");
-        if(DEBUG) Serial.print("p_new->productWhat ");
+        if(DEBUG) Serial.println(F("Device Init"));
+        if(DEBUG) Serial.print(F("p_new->productWhat "));
         if(DEBUG) Serial.println((char) p_new->productWhat);
-        if(DEBUG) Serial.print("p_new->productNum ");
+        if(DEBUG) Serial.print(F("p_new->productNum "));
         if(DEBUG) Serial.println(p_new->productNum);
-        if(DEBUG) Serial.print("p_new->sensor ");
+        if(DEBUG) Serial.print(F("p_new->sensor "));
         if(DEBUG) Serial.println((char) p_new->sensor);
 
     }
@@ -46,7 +46,7 @@ int insertNode (pList ourList, productType productWhat, char productNum[3], devi
 
     //Check Device was created successfully
     if (p_new == NULL) {
-        if(DEBUG) Serial.println("p_new == NULL");
+        if(DEBUG) Serial.println(F("p_new == NULL"));
         return RETURN_ERR;
     }
 
@@ -54,7 +54,7 @@ int insertNode (pList ourList, productType productWhat, char productNum[3], devi
     if (ourList->head == NULL) {
           ourList->head = p_new;
           ourList->tail = p_new;
-          if(DEBUG) Serial.println("INSERTED AT HEAD AND TAIL");
+          if(DEBUG) Serial.println(F("INSERTED AT HEAD AND TAIL"));
           return RETURN_OK;
     }
 
@@ -62,7 +62,7 @@ int insertNode (pList ourList, productType productWhat, char productNum[3], devi
     ourList->tail = p_new;
     // Point the old tail to our new Node, then point the tail pointer to the new Node
   
-        if(DEBUG) Serial.println("Device Inserted");
+        if(DEBUG) Serial.println(F("Device Inserted"));
 
     return RETURN_OK;
 }
@@ -140,12 +140,12 @@ int compareDevices(Device* first, Device* second){
 
 int queryDevice(Device* pDevice, pQueue messageQueue){
 
-        if(DEBUG) Serial.println("Device Query");
+        if(DEBUG) Serial.println(F("Device Query"));
         if(DEBUG) Serial.print("pDevice->productWhat ");
         if(DEBUG) Serial.println((char) pDevice->productWhat);
-        if(DEBUG) Serial.print("pDevice->productNum ");
+        if(DEBUG) Serial.print(F("pDevice->productNum "));
         if(DEBUG) Serial.println(pDevice->productNum);
-        if(DEBUG) Serial.print("pDevice->sensor ");
+        if(DEBUG) Serial.print(F("pDevice->sensor "));
         if(DEBUG) Serial.println((char) pDevice->sensor);
 
     //Create int to keep track of how many messages we get
@@ -163,7 +163,7 @@ int queryDevice(Device* pDevice, pQueue messageQueue){
 
     ourRequest.device = pDevice->sensor;
 
-    if(DEBUG) Serial.print("Sending destination ");
+    if(DEBUG) Serial.print(F("Sending destination "));
     if(DEBUG) Serial.println(ourRequest.destination);
 
     //Send Request on HC12
@@ -191,7 +191,7 @@ int queryDevice(Device* pDevice, pQueue messageQueue){
         howManyReturns++;
     }
 
-    if(DEBUG) Serial.println("Query Done");
+    if(DEBUG) Serial.println(F("Query Done"));
 
     return howManyReturns;
 
@@ -206,12 +206,12 @@ int queryList(pList list, pQueue messageQueue){
     //Keep track of how many messages are returned
     int messagesReturned = 0;
 
-    if(DEBUG) Serial.println("Function Called");
+    if(DEBUG) Serial.println(F("Function Called"));
 
     //while we have not reached the end of the list
     while(pDevice != NULL){
 
-        if(DEBUG) Serial.println("Sending Query");
+        if(DEBUG) Serial.println(F("Sending Query"));
 
         //queryDevice and add to messagesReturned
         messagesReturned += queryDevice(pDevice, messageQueue);
@@ -224,4 +224,23 @@ int queryList(pList list, pQueue messageQueue){
     }
 
     return messagesReturned;
+}
+
+int outputToSerialInPythonFormat(Message message){
+    if(message.productWhat == sensorBoard){
+        Serial.print(message.productNum);
+        Serial.print(message.sensor);
+        Serial.print('-');
+        if(message.data.type == intType) Serial.print(message.data.data.intData);
+        else {
+            Serial.print("not an int");
+            Serial.print('\n');
+            return RETURN_ERR;
+        }
+
+        Serial.print('\n');
+        return RETURN_OK;
+    }
+
+    return RETURN_ERR;
 }
