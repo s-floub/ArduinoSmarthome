@@ -1,15 +1,15 @@
-#include "transmission.h"
 #include "config.h"
+#include "transmission.h"
 #include "boardLogic.h"
 #include "mainBoard.h"
 #include "channels.h"
 #include "messageQueue.h"
 
 // 0: mother, 1: sensor, 2: actuator
-const productType PRODUCTWHAT = sensorBoard;
+productType PRODUCTWHAT;
 
 // No meaning besides as identifier
-const char PRODUCTNUM[3] = "11";
+char PRODUCTNUM[3];
 
 SoftwareSerial HC12(HC12TXPIN, HC12RXPIN);
 
@@ -25,6 +25,8 @@ void setup() {
   pinMode(HC12SETPIN, OUTPUT);
 
   digitalWrite(HC12SETPIN, HIGH);
+
+  initProduct();
 
   changeChannel(DEFAULTCHANNEL);
 
