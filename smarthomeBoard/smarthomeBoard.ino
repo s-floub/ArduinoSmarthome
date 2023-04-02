@@ -4,6 +4,7 @@
 #include "mainBoard.h"
 #include "channels.h"
 #include "messageQueue.h"
+#include "actuateMotors.h"
 
 // 0: mother, 1: sensor, 2: actuator
 productType PRODUCTWHAT;

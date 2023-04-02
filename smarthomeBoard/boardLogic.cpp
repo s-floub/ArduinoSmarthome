@@ -1,5 +1,6 @@
 #include "boardLogic.h"
 #include "SensorDataRetrieval.h"
+#include "actuateMotors.h"
 
 extern SoftwareSerial HC12;
 
@@ -66,6 +67,27 @@ void dealWithMessage(Message message){
       break;
 
     case actuatorBoard:
+    if(message.messageType == command){ //Check if Message is a request
+        Request theRequest = parseRequest(message); //Parse Message to find 
+
+        //string to match format of Request.destination
+        char whoIAm[4];
+        whoIAm[0] = PRODUCTWHAT;
+        whoIAm[1] = PRODUCTNUM[0];
+        whoIAm[2] = PRODUCTNUM[1];
+        whoIAm[3] = '\0';
+
+        if(DEBUG) {
+          Serial.print("whoIAm: ");
+          Serial.println(whoIAm);
+          Serial.print("destination ");
+          Serial.println(theRequest.destination);
+        }
+
+        if(!strcmp(theRequest.destination, whoIAm)){ 
+          // actuateMotors(theRequest.device);
+        }
+      }
 
       break;
 
@@ -75,6 +97,7 @@ void dealWithMessage(Message message){
 
       //printMessageToSerialDEBUG(message);
       outputToSerialInPythonFormat(message);
+
 
       break;
 
