@@ -22,6 +22,10 @@
 
 //Pin Defintions
 #define POTPIN A0
+#define DHTTYPE DHT11   // DHT 11
+#define DHTPIN 2     // define the digital pin the DHT is connected to
+#define thermPin A0  // define the analog pin the thermistor is connected to
+#define photoPin A1  // define the analog pin the photoresistor is connected to
 
 #define HC12TXPIN 10 //Might need to be pwm
 #define HC12RXPIN 11 //Might need to be pwm

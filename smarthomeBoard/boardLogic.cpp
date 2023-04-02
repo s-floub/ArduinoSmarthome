@@ -58,7 +58,7 @@ void dealWithMessage(Message message){
         }
 
         if(!strcmp(theRequest.destination, whoIAm)){ //Check if I am being requested
-          sendMessage(createMessage(message.sensor, pureData, 100)); 
+          sendMessage(createMessage(message.sensor, pureData, getSensorData(theRequest.device))); 
         }
       }
       break;
