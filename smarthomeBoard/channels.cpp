@@ -29,7 +29,7 @@ int changeChannel(int desiredChannel){
       inputBuffer += (char) HC12.read();         //Add incoming chars to inputBuffer
     }
 
-    if(DEBUG) Serial.print("Channel changed, "); 
+    if(DEBUG) Serial.print(F("Channel changed, ")); 
     if(DEBUG) Serial.println(inputBuffer);
     digitalWrite(HC12SETPIN, HIGH);               // Exit AT Command mode
 

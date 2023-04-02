@@ -14,7 +14,7 @@ Message generateErrorMessage(Error ourError, deviceType deviceType){
     int dig = sprintf(errorToString, "%03i", (int) ourError.errorCode);
     sprintf(errorToString + dig, "%lu", ourError.errorTime);
 
-    if(DEBUG) Serial.println("Our Error:");
+    if(DEBUG) Serial.println(F("Our Error:"));
     if(DEBUG) Serial.println(errorToString);
 
     return createMessage(deviceType, error, errorToString);
@@ -26,7 +26,7 @@ Error parseError(Message message){
     Error toReturn;
 
     if(message.messageType != error || message.data.type != strType){
-        if(DEBUG) Serial.println("NOT AN ERROR");
+        if(DEBUG) Serial.println(F("NOT AN ERROR"));
         toReturn.errorCode = theseAreNotTheErrorsYoureLookingFor;
         return toReturn;
     } 
