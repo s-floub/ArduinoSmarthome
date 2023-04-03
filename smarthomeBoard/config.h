@@ -44,6 +44,6 @@ void initProduct();
 const productType whatProduct=sensorBoard;
 
 // No meaning besides as identifier
-const char numberProduct[3] = "57";
+const char numberProduct[3] = "11";
 
 #endif

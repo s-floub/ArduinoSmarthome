@@ -66,22 +66,23 @@ void dealWithMessage(Message message) {
       }
       break;
 
-    case actuatorBoard:
-      if (message.messageType == command) {          //Check if Message is a request
-          
-
-        //string to match format of Request.destination
+    case actuatorBoard: //If this board is an actuator board
+      if (message.messageType == command) { //Check if the message type is a command
         
-
+        //Check if potentiometer is being sent
           if (message.sensor==pot) {
+            //If so, match the servo to the potentiometer position
             actuateMotors(message.data.data.intData);
           }
+          //If photoresistor is being sent 
           if(message.sensor==photo){
+            //If the data is 1, meaning the photo sensors lux is below 5
             if(message.data.data.intData==1){
-              turnOnLEDs();
+              turnOnLEDs(); //turn on the LED
             }
+            //If the data is 0 meaning the lux is above 5
             if(message.data.data.intData==0){
-              turnOffLEDs();              
+              turnOffLEDs();    //turn off the LED          
             }
           }          
         }
@@ -95,6 +96,7 @@ void dealWithMessage(Message message) {
 
       //printMessageToSerialDEBUG(message);
       outputToSerialInPythonFormat(message);
+      //Send a specific message based on certain sensor conditions
       sendMessage(createMessage(message.sensor, command, actuatingCases(message)));
 
       break;
