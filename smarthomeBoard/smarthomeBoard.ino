@@ -39,6 +39,9 @@ void setup() {
   insertNode(devicesList, sensorBoard, "11", humid);
   insertNode(devicesList, sensorBoard, "11", temp);
   insertNode(devicesList, sensorBoard, "11", pot);
+  
+  insertNode(devicesList, sensorBoard, "57", errors);
+  insertNode(devicesList, sensorBoard, "11", errors);
   }
 }
 
