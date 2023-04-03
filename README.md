@@ -18,3 +18,12 @@ https://stackoverflow.com/questions/24176789/how-does-using-log10-correctly-calc
 
 Description of arduino F() macro used for memory management
 https://www.baldengineer.com/arduino-f-macro.html
+
+Mathematical calculations for mapping an analog reading to voltage, then to Celsius when using the thermistor
+https://www.circuitgeeks.com/arduino-temperature-sensor-thermistor/
+
+Mathematical calculations for mapping an analog reading to voltage, then to lux when using the photoresistors
+https://www.circuitbasics.com/how-to-use-photoresistors-to-detect-light-on-an-arduino/
+
+How to configure the DHT sensor to read temperature and humidity
+https://www.circuitbasics.com/how-to-set-up-the-dht11-humidity-sensor-on-an-arduino/
