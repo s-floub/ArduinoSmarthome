@@ -1,11 +1,10 @@
 import serial
 import serial.tools.list_ports as list_port
 import time as timeLib
-from pandas import DataFrame
+import csv
 
 from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objects as go
-import plotly.express as px
 import plotly.subplots as make_subplots
 
 
@@ -72,9 +71,12 @@ while not serialInst.in_waiting:
     timeLib.sleep(0.001)
 package = serialInst.readline()
 
-# makes a
+# makes a temp graph object to give to the webserver
 graphs = make_subplots.make_subplots(rows=4, cols=1)
 
+#
+with open('dataOut.csv', 'w', newline='') as file:
+    writer = csv.writer(file)
 
 # --------------------------------------------------------------------------------------------------------
 # init the website
@@ -137,10 +139,15 @@ def sensorLoop(n):
                 boards.append(IndivBoard(ID))
                 boards[-1].addData(sensor, numData)
 
+            # adds data to cvs
+            with open('dataOut.csv', 'a') as file:
+                writer = csv.writer(file)
+                writer.writerow([timeLib.time(), ID, sensor, numData])
+
         # makes a graph subplot which is actual space for 4 graphs
         graphs = make_subplots.make_subplots(rows=4, cols=1)
 
-        # goes through eacch board and adds a new line for every updated sensor
+        # goes through each board and adds a new line for every updated sensor
         for board in boards:
             for j in range(1,5):
                 if board.sensors[j-1].updated:
