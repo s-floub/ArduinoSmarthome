@@ -41,10 +41,10 @@ void initProduct();
 #define MAXMESSAGELEN (MINMESSAGELEN + MAXDATASTRINGLEN)
 
 // 0: mother, 1: sensor, 2: actuator
-const productType whatProduct = mainBoard;
+const productType whatProduct = sensorBoard;
 
 // No meaning besides as identifier
-const char numberProduct[3] = "00";
+const char numberProduct[3] = "57";
 
 //Identifier of boards that will be able to control LED's and servomotors
 const char sensorPhotoControl[3] = "57";

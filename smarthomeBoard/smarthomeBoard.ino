@@ -33,11 +33,13 @@ void setup() {
   changeChannel(DEFAULTCHANNEL);
 
   if (PRODUCTWHAT == mainBoard){
+    //Board 57
   insertNode(devicesList, sensorBoard, "57", temp);
   insertNode(devicesList, sensorBoard, "57", pot);
   insertNode(devicesList, sensorBoard, "57", photo);
   //insertNode(devicesList, sensorBoard, "57", errors);
 
+    //Board 11
   insertNode(devicesList, sensorBoard, "11", humid);
   insertNode(devicesList, sensorBoard, "11", temp);
   insertNode(devicesList, sensorBoard, "11", pot);
