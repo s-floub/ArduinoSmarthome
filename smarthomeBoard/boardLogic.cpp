@@ -5,6 +5,30 @@
 
 extern SoftwareSerial HC12;
 
+
+int addMessageToQueue(pQueue queue, Message message) {
+
+  //Check that there is enough data for a message to be possible
+  if (HC12.available() < MINMESSAGELEN) return RETURN_ERR;
+
+  //delay to allow new HC12 data to come in
+  delay(100);
+
+  Message theMessage = reciveTransmission();
+
+  //Check if message is valid (not corrupted)
+  if (!checkMessageValidity(theMessage)) {
+
+    //If valid add to queue
+    Enqueue(queue, CreateItem(theMessage));
+    return RETURN_OK;
+  }
+
+  if(DEBUG) Serial.println(F("RECIVEDINVALIDMESSAGE"));
+  if(DEBUG) Serial.println(checkMessageValidity(theMessage));
+  return RETURN_ERR;
+}
+
 int reciveMessageToQueue(pQueue queue) {
 
   //Check that there is enough data for a message to be possible
@@ -67,15 +91,12 @@ void dealWithMessage(Message message) {
       break;
 
     case actuatorBoard:
-      if (message.messageType == command) {          //Check if Message is a request
+      if (message.messageType == command) {          //Check if Message is a command
           
-
-        //string to match format of Request.destination
-        
-
           if (message.sensor==pot) {
             actuateMotors(message.data.data.intData);
           }
+          
           if(message.sensor==photo){
             if(message.data.data.intData==1){
               turnOnLEDs();

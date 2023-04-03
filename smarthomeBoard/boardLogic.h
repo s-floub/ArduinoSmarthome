@@ -6,6 +6,9 @@
 #include "messageQueue.h"
 #include "mainBoard.h"
 
+//Adds provided message to provided queue
+int addMessageToQueue(pQueue queue, Message message);
+
 //Queues message from HC12 to the queue provided
 int reciveMessageToQueue(pQueue queue);
 
