@@ -29,9 +29,9 @@ class IndivBoard:
 class IndivSensor:
 
     def __init__(self, senType):
-        self.data=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.data=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         x = timeLib.time()
-        self.time = [x,x,x,x,x,x,x,x,x,x]
+        self.time = [x,x,x,x,x,x,x,x,x,x,x,x,x,x,x]
         self.senType = senType
         self.updated = False
         self.df = DataFrame(data=self.data, index=self.time)
@@ -140,7 +140,7 @@ def sensorLoop(n):
                         name += 'Temp'
                     elif j == 4:
                         name += 'Humid'
-                    name += board.boardNum
+                    name += + " -" + board.boardNum
                     graphs.add_trace(row=j,col=1,
                                      trace=go.Scatter(x=board.sensors[j-1].time,
                                                       y=board.sensors[j-1].data,
