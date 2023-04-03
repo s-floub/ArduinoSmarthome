@@ -17,7 +17,7 @@ void initProduct();
 
 //Debugging defines
 #define PRINTEVERYTHING 0
-#define MAINBOARD 1
+#define MAINBOARD 0
 
 #define DEBUG 1
 
@@ -33,15 +33,17 @@ void initProduct();
 #define DHTPIN 2     // define the digital pin the DHT is connected to
 #define thermPin A0  // define the analog pin the thermistor is connected to
 #define photoPin A1  // define the analog pin the photoresistor is connected to
+#define ledPIN 7
+#define servoPin 6
 
 #define HC12TXPIN 10 //Might need to be pwm
 #define HC12RXPIN 11 //Might need to be pwm
 #define HC12SETPIN 12
 
 // 0: mother, 1: sensor, 2: actuator
-const productType whatProduct = mainBoard;
+const productType whatProduct = sensorBoard;
 
 // No meaning besides as identifier
-const char numberProduct[3] = "00";
+const char numberProduct[3] = "57";
 
 #endif
