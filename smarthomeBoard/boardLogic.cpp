@@ -166,6 +166,7 @@ void dealWithMessage(Message message) {
       break;
   }
 }
+}
 
 void printMessageToSerialDEBUG(Message message) {
   if (!DEBUG) return;
