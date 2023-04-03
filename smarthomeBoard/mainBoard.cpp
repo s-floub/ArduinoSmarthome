@@ -302,8 +302,8 @@ int queryList(pList list, pQueue messageQueue, int skipDigs){
         if(DEBUG) Serial.println(F("Sending Query"));
 
         //queryDevice and add to messagesReturned
-        if (pDevice->sensor != errors) messagesReturned += queryDevice(pDevice, messageQueue);
-        else messagesReturned += queryDeviceForError(pDevice, messageQueue);
+        /*if (pDevice->sensor != errors)*/ messagesReturned += queryDevice(pDevice, messageQueue);
+        /*else messagesReturned += queryDeviceForError(pDevice, messageQueue);*/
 
         messagesSent++;
 

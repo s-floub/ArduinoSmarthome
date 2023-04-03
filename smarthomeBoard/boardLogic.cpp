@@ -54,10 +54,10 @@ int reciveMessageToQueue(pQueue queue) {
     return RETURN_OK;
   }
 
-  Error recivedInvalid;
+  /*Error recivedInvalid;
   recivedInvalid.errorCode = invalidTransmission;
   recivedInvalid.errorTime = millis();
-  addMessageToQueue(errorQueue, generateErrorMessage(recivedInvalid, exception));
+  addMessageToQueue(errorQueue, generateErrorMessage(recivedInvalid, exception));*/
 
   if(DEBUG) Serial.println(F("RECIVEDINVALIDMESSAGE"));
   if(DEBUG) Serial.println(checkMessageValidity(theMessage));
@@ -81,14 +81,14 @@ void dealWithMessage(Message message) {
     case sensorBoard:
 
       //Check for error case where two boards have the same ID
-      if(!strcmp(PRODUCTNUM, message.productNum) && PRODUCTWHAT == message.productWhat){
+      /*if(!strcmp(PRODUCTNUM, message.productNum) && PRODUCTWHAT == message.productWhat){
         Error dupeBoard;
         dupeBoard.errorCode = recivedTransmissionFromSelf;
         dupeBoard.errorTime = millis();
         addMessageToQueue(errorQueue, generateErrorMessage(dupeBoard, message.sensor));
       }
 
-      else if (message.messageType == request) {          //Check if Message is a request
+      else*/ if (message.messageType == request) {          //Check if Message is a request
         Request theRequest = parseRequest(message);  //Parse Message to find
 
         //string to match format of Request.destination
@@ -109,11 +109,11 @@ void dealWithMessage(Message message) {
           sendMessage(createMessage(theRequest.device, pureData, getSensorData(theRequest.device)));
         }
 
-        else if (!strcmp(theRequest.destination, whoIAm) && theRequest.type == error){
+        /*else if (!strcmp(theRequest.destination, whoIAm) && theRequest.type == error){
           Message errorMessageFromQueue;
           Dequeue(errorQueue, errorMessageFromQueue);
           sendMessage(errorMessageFromQueue);
-        }
+        }*/
       }
       break;
 
@@ -143,12 +143,12 @@ void dealWithMessage(Message message) {
 
     case mainBoard:
 
-      if (message.messageType == error){
+      /*if (message.messageType == error){
         errorLookupToSerial(message);
       }
 
 
-      else if (message.messageType == pureData){
+      else*/ if (message.messageType == pureData){
       //Send data to python webserver
       outputToSerialInPythonFormat(message);
       //Send a specific message based on certain sensor conditions
@@ -158,14 +158,16 @@ void dealWithMessage(Message message) {
             sendMessage(createMessage(message.sensor, command, actuatingCases(message)));
           }
 
+      }
+
       break;
 
     default:
       //Case exists for every board type, a board should never exist unintialised
       PRODUCTWHAT = sensorBoard;
       break;
+  
   }
-}
 }
 
 void printMessageToSerialDEBUG(Message message) {

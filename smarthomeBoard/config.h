@@ -13,7 +13,7 @@ void initProduct();
 //Debugging defines
 #define PRINTEVERYTHING 0
 
-#define DEBUG 0
+#define DEBUG 1
 
 //Changeable constants
 #define MESSAGETIMEOUT 4000
@@ -41,10 +41,10 @@ void initProduct();
 #define MAXMESSAGELEN (MINMESSAGELEN + MAXDATASTRINGLEN)
 
 // 0: mother, 1: sensor, 2: actuator
-const productType whatProduct = actuatorBoard;
+const productType whatProduct = mainBoard;
 
 // No meaning besides as identifier
-const char numberProduct[3] = "99";
+const char numberProduct[3] = "00";
 
 //Identifier of boards that will be able to control LED's and servomotors
 const char sensorPhotoControl[3] = "57";
