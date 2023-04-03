@@ -6,7 +6,8 @@ int getSensorData(deviceType data) {
   //Variables to return specific sensor readings
   /**NOTE: They are initialized as floats but returned 
   as integers in each case, so all math can be done with most significant digits **/
-  float roomTemperature, humidity, photoresistor;
+  float roomTemperature, humidity;
+  int photoresistor;
   int potentiometer;  //Potentiometer is an integer as it is always a 0-1023 reading
 
   //Initialize DHT
@@ -64,16 +65,16 @@ int getSensorData(deviceType data) {
 
     /*Case for if this cluster does not contain any photoresistor, and NaN will be returned for photo
   Since their is no alternative to obtain photo, either an error code or nothing must be returned */
-    if (isnan(photoresistor)) {
-      return;  //error code
-    }
+    // if (isnan(photoresistor)) {
+    //   return;  //error code
+    // }
     //Print the humidity for debugging purposes
     Serial.print("Lux: ");
     Serial.print((int)photoresistor);
     Serial.print(" lx");
 
     //Send PHOTORESISTANCE
-    return (int)photoresistor;
+    return photoresistor;
   }
 
 
@@ -84,7 +85,7 @@ int getSensorData(deviceType data) {
     // No math is done as it is just being returned as an analog reading
     potentiometer = analogRead(POTPIN);
     //Just a check to ensure readings are coming through
-    if (isnan(POTPIN)) {
+    if (isnan(potentiometer)) {
       return;
     }
     //Send POTENTIOMETER
@@ -127,11 +128,12 @@ int PHOTO() {  //Function to calculate photoresistance in lux
   int resistance = 10000;  //Sets resistance to 10k Ohm
   int readDelay = 1000;    //Sets a delay for recieving
 
-  int voltage = (analogRead(photoPin)) * 5.0 / 1024.0;  //Gets the voltage reading from the photoresistor
+  int reading = analogRead(photoPin);
+  float voltage = reading * 5.0 / 1024.0;  //Gets the voltage reading from the photoresistor
 
   //Math to calculate the light intensity
   float Rphoto = 5.0 / voltage * resistance - resistance;
-  float lightIntensity = 500 / (Rphoto / 1000);
+  int lightIntensity = 500 / (Rphoto / 1000);
 
   delay(readDelay);       //Delay for 1 second
   return lightIntensity;  //returns the light intensity in lux
