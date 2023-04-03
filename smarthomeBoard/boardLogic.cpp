@@ -22,7 +22,7 @@ int reciveMessageToQueue(pQueue queue){
     return RETURN_OK;
   }
 
-  if(DEBUG) Serial.println("RECIVEDINVALIDMESSAGE");
+  if(DEBUG) Serial.println(F("RECIVEDINVALIDMESSAGE"));
   if(DEBUG) Serial.println(checkMessageValidity(theMessage));
   return RETURN_ERR;
 
@@ -54,9 +54,9 @@ void dealWithMessage(Message message){
         whoIAm[3] = '\0';
 
         if(DEBUG) {
-          Serial.print("whoIAm: ");
+          Serial.print(F("whoIAm: "));
           Serial.println(whoIAm);
-          Serial.print("destination ");
+          Serial.print(F("destination "));
           Serial.println(theRequest.destination);
         }
 
@@ -78,9 +78,9 @@ void dealWithMessage(Message message){
         whoIAm[3] = '\0';
 
         if(DEBUG) {
-          Serial.print("whoIAm: ");
+          Serial.print(F("whoIAm: "));
           Serial.println(whoIAm);
-          Serial.print("destination ");
+          Serial.print(F("destination "));
           Serial.println(theRequest.destination);
         }
 
@@ -111,34 +111,34 @@ void dealWithMessage(Message message){
 void printMessageToSerialDEBUG(Message message){
   if (!DEBUG) return;
 
-    Serial.println("message.productWhat");
+    Serial.println(F("message.productWhat"));
     Serial.write(message.productWhat);
-     Serial.println("message.productNum");
+     Serial.println(F("message.productNum"));
     Serial.write(message.productNum);
-     Serial.println("message.sensor");
+     Serial.println(F("message.sensor"));
     Serial.write(message.sensor);
-     Serial.println("message.messageType");
+     Serial.println(F("message.messageType"));
     Serial.write(message.messageType);
-     Serial.println("message.checkbyte");
+     Serial.println(F("message.checkbyte"));
     Serial.write(message.checkbyte);
 
-     Serial.println("message.data.type");
+     Serial.println(F("message.data.type"));
     Serial.write(message.data.type);
 
     //Switch case prints data in the correct format
     switch(message.data.type){
         case intType:
-         Serial.println("message.data.data.intData");
+         Serial.println(F("message.data.data.intData"));
             Serial.print(message.data.data.intData);
         break;
 
         case floatType:
-         Serial.println("message.data.data.floatData");
+         Serial.println(F("message.data.data.floatData"));
             Serial.print(message.data.data.floatData);
         break;
 
         case strType:
-         Serial.println("message.data.data.strData");
+         Serial.println(F("message.data.data.strData"));
             Serial.print(message.data.data.strData);
         break;
 
@@ -146,7 +146,7 @@ void printMessageToSerialDEBUG(Message message){
             //Error case.
         break;
     }
- Serial.println("message.endChar");
+ Serial.println(F("message.endChar"));
     Serial.write(message.endChar);
 }
 
@@ -155,13 +155,13 @@ void printMessageToSerialDEBUG(Message message){
 void printRequestToSerialDEBUG(Request request){
   if (!DEBUG) return;
 
-  Serial.println("request.destination");
+  Serial.println(F("request.destination"));
   Serial.write(request.destination);
-   Serial.println("request.device");
+   Serial.println(F("request.device"));
   Serial.write(request.device);
-   Serial.println("request.type");
+   Serial.println(F("request.type"));
   Serial.write(request.type);
-   Serial.println("request.additional");
+   Serial.println(F("request.additional"));
   Serial.print((int) request.additional);
 
 }
