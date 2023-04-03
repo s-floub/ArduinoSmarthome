@@ -4,3 +4,4 @@ ArduinoOutput/**
 PythonScripts/.idea/**
 PythonScripts/178PythonScript/.idea/**
 *.csv
+.VSCodeCounter/**
