@@ -4,6 +4,7 @@ import time as timeLib
 import csv
 
 from dash import Dash, dcc, html, Input, Output
+from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
 import plotly.subplots as make_subplots
 
@@ -60,7 +61,7 @@ class IndivSensor:
 # init serial reading of arduino through the serial ports
 serialInst = serial.Serial()
 serialInst.baudrate = 9600
-serialInst.port = 'COM4'
+serialInst.port = 'COM11'
 serialInst.open()
 
 # variable used for later
@@ -96,7 +97,7 @@ app.layout = html.Div(children=[
 ])
 
 
-# when ever the website calles on the code (at 1 sec intervals) it then reads serial and updates the graphs
+# when ever the website calls on the code (at 1 sec intervals) it then reads serial and updates the graphs
 @app.callback(Output('graph1', 'figure'),
               Input('sensor_update', 'n_intervals'))
 def sensorLoop(n):
@@ -106,6 +107,7 @@ def sensorLoop(n):
         good = True                         # temp variable for indicating a good read
         package = serialInst.readline()     # reads the serial
         line = package.decode('utf')        # decodes to normal text
+        print(line)
 
         # attempts to get data (as an int) and the ID + sensor type
         try:
@@ -144,6 +146,9 @@ def sensorLoop(n):
                 writer = csv.writer(file)
                 writer.writerow([timeLib.time(), ID, sensor, numData])
 
+        else:
+            raise PreventUpdate
+
         # makes a graph subplot which is actual space for 4 graphs
         graphs = make_subplots.make_subplots(rows=4, cols=1)
 
@@ -172,6 +177,9 @@ def sensorLoop(n):
 
         # returns the graph to the app callback to be printed in the website
         return graphs
+
+    else:
+        raise PreventUpdate
 
 
 # the website
