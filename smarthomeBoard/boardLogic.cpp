@@ -68,33 +68,21 @@ void dealWithMessage(Message message) {
 
     case actuatorBoard:
       if (message.messageType == command) {          //Check if Message is a request
-        Request theRequest = parseRequest(message);  //Parse Message to find
+          
 
         //string to match format of Request.destination
-        char whoIAm[4];
-        whoIAm[0] = PRODUCTWHAT;
-        whoIAm[1] = PRODUCTNUM[0];
-        whoIAm[2] = PRODUCTNUM[1];
-        whoIAm[3] = '\0';
+        
 
-        if(DEBUG) {
-          Serial.print(F("whoIAm: "));
-          Serial.println(whoIAm);
-          Serial.print(F("destination "));
-          Serial.println(theRequest.destination);
-        }
-
-        if (!strcmp(theRequest.destination, whoIAm)) {
-          if (message.messageType == pot) {
+          if (message.sensor==pot) {
             actuateMotors(message.data.data.intData);
           }
-          if(message.messageType==photo){
+          if(message.sensor==photo){
             if(message.data.data.intData==1){
               turnOnLEDs();
             }
           }          
         }
-      }
+      
 
       break;
 
