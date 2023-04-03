@@ -116,7 +116,11 @@ void dealWithMessage(Message message) {
 
       //printMessageToSerialDEBUG(message);
       outputToSerialInPythonFormat(message);
-      sendMessage(createMessage(message.sensor, command, actuatingCases(message)));
+
+      if( (!strcmp(message.productNum, sensorPotControl) && message.sensor == pot) || 
+          (!strcmp(message.productNum, sensorPhotoControl) && message.sensor == photo)){
+            sendMessage(createMessage(message.sensor, command, actuatingCases(message)));
+          }
 
       break;
 

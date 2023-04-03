@@ -18,7 +18,7 @@ void initProduct();
 //Debugging defines
 #define PRINTEVERYTHING 0
 
-#define DEBUG 1
+#define DEBUG 0
 
 //Changeable constants
 #define MESSAGETIMEOUT 3000
@@ -40,9 +40,13 @@ void initProduct();
 #define HC12SETPIN 12
 
 // 0: mother, 1: sensor, 2: actuator
-const productType whatProduct= sensorBoard;
+const productType whatProduct= mainBoard;
 
 // No meaning besides as identifier
 const char numberProduct[3] = "00";
+
+//Identifier of boards that will be able to control LED's and servomotors
+const char sensorPhotoControl[3] = "57";
+const char sensorPotControl[3] = "11";
 
 #endif
