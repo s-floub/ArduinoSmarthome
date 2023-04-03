@@ -1,7 +1,19 @@
+Libraries to install:
+
+Arduino:
+DHT sensor library by Adafruit
+Install by searching the same name in the Arduino IDE library search
+
+Python 3.7+:
+pyserial
+time
+pandas
+dash
+plotly
+Install by using the command "pip install ____"
 
 
-
-Attributions
+Attributions:
 
 Arduino Long Range Wireless Communication using HC-12 by Dejan Nedelkovski
 https://howtomechatronics.com/tutorials/arduino/arduino-and-hc-12-long-range-wireless-communication-module/
