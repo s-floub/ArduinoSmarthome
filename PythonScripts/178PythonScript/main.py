@@ -5,6 +5,7 @@ from pandas import DataFrame
 import openpyxl
 
 from dash import Dash, dcc, html, Input, Output
+from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.subplots as make_subplots
@@ -133,13 +134,13 @@ def sensorLoop(n):
                 if board.sensors[j-1].updated:
                     name = ''
                     if j == 1:
-                        name += 'Photo'
+                        name += 'Photoresistor'
                     elif j == 2:
-                        name += 'Pot'
+                        name += 'Potentiomiter'
                     elif j == 3:
-                        name += 'Temp'
+                        name += 'Tempeture'
                     elif j == 4:
-                        name += 'Humid'
+                        name += 'Humidity'
                     name += " -" + board.boardNum
                     graphs.add_trace(row=j,col=1,
                                      trace=go.Scatter(x=board.sensors[j-1].time,
@@ -151,4 +152,4 @@ def sensorLoop(n):
         return graphs
 
 
-app.run_server(debug=False)
+app.run_server(debug=True, port=4321, use_reloader=False, threaded=True)
