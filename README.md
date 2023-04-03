@@ -27,3 +27,76 @@ https://www.circuitbasics.com/how-to-use-photoresistors-to-detect-light-on-an-ar
 
 How to configure the DHT sensor to read temperature and humidity
 https://www.circuitbasics.com/how-to-set-up-the-dht11-humidity-sensor-on-an-arduino/
+
+~~ Down the rabbit whole ~~
+
+Python get current time
+https://www.programiz.com/python-programming/datetime/current-time
+
+Real Time Date
+https://www.pyxll.com/docs/userguide/rtd.html
+
+
+Pandas Tutorial
+https://www.w3schools.com/python/pandas/default.asp
+
+Python Excel Tutorial: The Definitive Guide
+https://www.datacamp.com/tutorial/python-excel-tutorial
+
+Real time feeds: Read Excel from Python
+https://training.xlwings.org/courses/270054/lectures/4299644
+xlwings - Make Excel Fly!
+https://docs.xlwings.org/en/latest/
+
+Using ActiveXperts Serial Port Component with VBA (Visual Basic for Applications)
+https://www.activexperts.com/serial-port-component/howto/vba/
+
+VBA Serial Port Communication
+https://stackoverflow.com/questions/62030269/vba-serial-port-communication/62030351#62030351
+
+python-igraph stable
+https://python.igraph.org/en/stable/
+
+Graph Sensor Data with Python and Matplotlib
+https://learn.sparkfun.com/tutorials/graph-sensor-data-with-python-and-matplotlib/update-a-graph-in-real-time
+
+Plot With pandas: Python Data Visualization for Beginners
+https://realpython.com/pandas-plot-python/
+
+
+Plotly.js: A high-level, declarative charting library
+https://stackshare.io/plotly-js
+
+How to Use ggplot2 in Python
+https://towardsdatascience.com/how-to-use-ggplot2-in-python-74ab8adec129
+
+Graph Your Data With Python and ggplot
+https://realpython.com/courses/graph-data-with-python-and-ggplot/
+
+pandas.DataFrame
+https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html
+
+Real-Time Bike Station Data Visualization Using Python and Plotly
+https://medium.com/@ajosegun_/real-time-dashboard-in-python-b8c9a9c4e050
+
+Dash Bootstrap Components
+https://dash-bootstrap-components.opensource.faculty.ai/
+
+ dcc.Input
+ https://dash.plotly.com/dash-core-components/input
+ 
+ Callbacks in Dash
+ https://campus.datacamp.com/courses/building-dashboards-with-dash-and-plotly/interactivity-with-callbacks-and-components?ex=1
+ 
+ How to add multiple graphs to a Plotly Dash app on a single browser page in Python Plotly?
+ https://www.tutorialspoint.com/how-to-add-multiple-graphs-to-a-plotly-dash-app-on-a-single-browser-page-in-python-plotly
+ 
+ subplots-in-dash
+ https://plotly.com/python/subplots/#subplots-in-dash
+ https://plotly.com/python/figure-labels/
+ 
+ How to Read CSV in Python, Write and Append Too
+ https://adamtheautomator.com/read-csv-in-python/#:~:text=If%20you%20need%20to%20append,writerow(column_name)%20).
+ 
+ How to Create a CSV File in Python?
+ https://www.scaler.com/topics/how-to-create-a-csv-file-in-python/
