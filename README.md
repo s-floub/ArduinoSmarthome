@@ -13,6 +13,31 @@ Python 3.7+:
     plotly  
 Install by using the command "pip install ____"
 
+**File Outlines**
+
+actuateMotors.cpp/.h - Functions to control Servos and LED's on actuatorBoard
+
+actuatingCases.cpp/.h - Functions to compute values to send to actuatorBoard
+
+boardLogic.cpp/.h - Functions determining the methods that all board types will handle Messaegs with
+
+channels.cpp/.h - Control of changing HC12 channel
+
+config.cpp/.h - Definition of constants and initialisation of board types
+
+enums.h - Definitions of enums used extensivly throughout program
+
+errors.cpp/.h - Functions to handle and create Error type Messages
+
+mainBoard.cpp/.h - Functions to handle specific actions to main board
+
+messageQueue.cpp/.h - Functions to handle Messages in a Queue format
+
+sensorDataRetrieval.cpp/.h - Functions to return requested reading from sensor
+
+smarthomeBoard.ino - main Arduino file, used to initalise LL elements and to run board actions in loop
+
+transmission.cpp/.h - Functions defining transmission protocols
 
 **Attributions:**
 
