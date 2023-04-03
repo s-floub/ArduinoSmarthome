@@ -193,7 +193,10 @@ int queryDevice(Device* pDevice, pQueue messageQueue){
     while(messageQueue->count > 0){
         if(DEBUG) Serial.println(F("Processing Message"));
         Message incomingMessage;
-        Dequeue(messageQueue, incomingMessage);
+        if (Dequeue(messageQueue, incomingMessage) == RETURN_ERR) {
+            if(DEBUG) Serial.println(F("Breaking Reading Queue"));
+            break;
+        }
         dealWithMessage(incomingMessage);
         howManyReturns++;
     }

@@ -33,9 +33,12 @@ void setup() {
   changeChannel(DEFAULTCHANNEL);
 
   if (PRODUCTWHAT == mainBoard){
+  insertNode(devicesList, sensorBoard, "57", temp);
+  insertNode(devicesList, sensorBoard, "57", pot);
+  insertNode(devicesList, sensorBoard, "57", photo);
   insertNode(devicesList, sensorBoard, "11", humid);
   insertNode(devicesList, sensorBoard, "11", temp);
-
+  insertNode(devicesList, sensorBoard, "11", pot);
   }
 
 }
@@ -47,6 +50,14 @@ int runOnce = 0;
 
 void loop() {
 
+  if(DEBUG) Serial.println(F("sizeof Device"));
+  if(DEBUG) Serial.println((int) sizeof (Device));
+  if(DEBUG) Serial.println(F("sizeof queueItem"));
+  if(DEBUG) Serial.println((int) sizeof (QueueItem));
+  if(DEBUG) Serial.println(F("sizeof Queue"));
+  if(DEBUG) Serial.println((int) sizeof (Queue));
+  if(DEBUG) Serial.println(F("sizeof LL"));
+  if(DEBUG) Serial.println((int) sizeof (List));
 
   if(PRINTEVERYTHING && DEBUG){
   while (HC12.available()) {        // If HC-12 has data

@@ -83,6 +83,7 @@ int Dequeue (pQueue queue, Message &messageReturn) {
     return RETURN_OK;
   }
 
+  if(DEBUG) Serial.println(F("Dequeue got messed up"));
   return RETURN_ERR;
 }
 
