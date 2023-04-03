@@ -56,7 +56,7 @@ class IndivSensor:
 
 serialInst = serial.Serial()
 serialInst.baudrate = 9600
-serialInst.port = 'COM4'
+serialInst.port = 'COM11'
 serialInst.open()
 
 
@@ -140,7 +140,7 @@ def sensorLoop(n):
                         name += 'Temp'
                     elif j == 4:
                         name += 'Humid'
-                    name += + " -" + board.boardNum
+                    name += " -" + board.boardNum
                     graphs.add_trace(row=j,col=1,
                                      trace=go.Scatter(x=board.sensors[j-1].time,
                                                       y=board.sensors[j-1].data,
