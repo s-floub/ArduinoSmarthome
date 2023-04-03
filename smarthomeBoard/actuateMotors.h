@@ -5,7 +5,6 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-#include <Arduino.h>
-void doSetup();
 void actuateMotors(int value);
+void turnOnLEDs();
 #endif
