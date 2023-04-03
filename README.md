@@ -1,3 +1,5 @@
+Link to GitHub of project: https://github.com/s-floub/ArduinoSmarthome 
+
 Libraries to install:
 
 Arduino:
