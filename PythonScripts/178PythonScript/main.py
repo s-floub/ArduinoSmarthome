@@ -77,17 +77,13 @@ graphs = make_subplots.make_subplots(rows=4, cols=1)
 app = Dash(__name__, update_title=None)
 
 app.layout = html.Div(children=[
-    html.Div(children='''
-            Graph Sensor: Photo
-        '''),
-
-        dcc.Graph(
-            id='graph1',
-            figure=graphs
-        ),
+    dcc.Graph(
+        id='graph1',
+        figure=graphs
+    ),
     dcc.Interval(
         id="sensor_update",
-        interval=3000,
+        interval=1000,
         n_intervals=0
     )
 ])
@@ -135,10 +131,22 @@ def sensorLoop(n):
         for board in boards:
             for j in range(1,5):
                 if board.sensors[j-1].updated:
+                    name = ''
+                    if j == 1:
+                        name += 'Photo'
+                    elif j == 2:
+                        name += 'Pot'
+                    elif j == 3:
+                        name += 'Temp'
+                    elif j == 4:
+                        name += 'Humid'
+                    name += board.boardNum
                     graphs.add_trace(row=j,col=1,
                                      trace=go.Scatter(x=board.sensors[j-1].time,
-                                                      y=board.sensors[j-1].data))
+                                                      y=board.sensors[j-1].data,
+                                                      name=name ))
         # graphs.show()
+        graphs.update_layout(height=1200, width=1800)
 
         return graphs
 
