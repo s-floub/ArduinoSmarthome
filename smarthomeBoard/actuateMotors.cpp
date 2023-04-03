@@ -10,3 +10,9 @@ void turnOnLEDs(){
   pinMode(ledPIN, OUTPUT);
   digitalWrite(ledPIN, HIGH);   
 }
+
+void turnOffLEDs(){
+  pinMode(ledPIN, OUTPUT);
+  digitalWrite(ledPIN, LOW); 
+
+}

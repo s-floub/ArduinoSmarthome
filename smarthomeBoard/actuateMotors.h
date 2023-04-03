@@ -7,4 +7,5 @@
 
 void actuateMotors(int value);
 void turnOnLEDs();
+void turnOffLEDs();
 #endif
