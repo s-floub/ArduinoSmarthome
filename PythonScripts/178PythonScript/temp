@@ -1,0 +1,17 @@
+
+@app.callback(Output('graph2', 'figure'),
+              Input('sensor_update', 'n_intervals'))
+def updateGraph1():
+    sensorLoop(1)
+
+
+@app.callback(Output('graph3', 'figure'),
+              Input('sensor_update', 'n_intervals'))
+def updateGraph1():
+    sensorLoop(2)
+
+
+@app.callback(Output('graph4', 'figure'),
+              Input('sensor_update', 'n_intervals'))
+def updateGraph1():
+    sensorLoop(3)

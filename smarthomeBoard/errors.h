@@ -3,6 +3,9 @@
 
 #include "transmission.h"
 #include <math.h>
+#include "messageQueue.h"
+
+extern pQueue errorQueue;
 
 typedef struct error{
     errorType errorCode; 
@@ -14,7 +17,7 @@ typedef struct error{
 void errorLookupToSerial(Message messageWithError);
 
 //Assemble and return error message ready to send, from error code
-Message generateErrorMessage(Error error);
+Message generateErrorMessage(Error ourError, deviceType deviceType);
 
 //Parse and return Error from Message
 Error parseError(Message message);

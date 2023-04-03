@@ -208,10 +208,87 @@ int queryDevice(Device* pDevice, pQueue messageQueue){
 }
 
 
-int queryList(pList list, pQueue messageQueue){
+int queryDeviceForError(Device* pDevice, pQueue messageQueue){
+
+        if(DEBUG) Serial.println(F("Device Query For Error"));
+        if(DEBUG) Serial.print("pDevice->productWhat ");
+        if(DEBUG) Serial.println((char) pDevice->productWhat);
+        if(DEBUG) Serial.print(F("pDevice->productNum "));
+        if(DEBUG) Serial.println(pDevice->productNum);
+        if(DEBUG) Serial.print(F("pDevice->sensor "));
+        if(DEBUG) Serial.println((char) pDevice->sensor);
+
+    //Create int to keep track of how many messages we get
+    int howManyReturns = 0;
+
+    //Assemble Request with desired paramaters
+    Request ourRequest;
+
+    ourRequest.type = error;
+
+    ourRequest.destination[0] = (char) pDevice->productWhat;
+    ourRequest.destination[1] = (char) pDevice->productNum[0];
+    ourRequest.destination[2] = (char) pDevice->productNum[1];
+    ourRequest.destination[3] = '\0';
+
+    ourRequest.device = pDevice->sensor;
+
+    if(DEBUG) Serial.print(F("Sending destination "));
+    if(DEBUG) Serial.println(ourRequest.destination);
+
+    //Send Request on HC12
+    sendMessage(createMessage(main, request, ourRequest));
+
+    //Log when sent (relative to Arduino running time so far)
+    int sentTime = millis();
+
+    //While waiting for return message(s)
+    while(millis() - sentTime < MESSAGETIMEOUT && HC12.available() < MINMESSAGELEN){
+        delay(100);
+        if(DEBUG) Serial.println(F("..."));
+    }
+
+    delay(500);
+
+    //While there are messages avalible, recive those messages to our queue
+    while (HC12.available() >= MINMESSAGELEN){
+        if(DEBUG) Serial.println(F("Reciving Message"));
+        if (reciveMessageToQueue(messageQueue) == RETURN_ERR) {
+            if(DEBUG) Serial.println(F("Breaking Loop"));
+            break;
+        }
+    }
+
+    //Read all messages in the queue
+    while(messageQueue->count > 0){
+        if(DEBUG) Serial.println(F("Processing Message"));
+        Message incomingMessage;
+        if (Dequeue(messageQueue, incomingMessage) == RETURN_ERR) {
+            if(DEBUG) Serial.println(F("Breaking Reading Queue"));
+            break;
+        }
+        dealWithMessage(incomingMessage);
+        howManyReturns++;
+    }
+
+    if(DEBUG) Serial.println(F("Query Done"));
+
+    return howManyReturns;
+
+}
+
+int queryList(pList list, pQueue messageQueue, int skipDigs){
     
     //Start with head
     Device* pDevice = list->head;
+
+
+    //Incriment down list, used for combatting wirelesses scuff
+    for (int i = 0; i < skipDigs; i++){
+        pDevice = pDevice->pNextDevice;
+    }
+
+
 
     //Keep track of how many messages are returned
     int messagesReturned = 0;
@@ -225,8 +302,10 @@ int queryList(pList list, pQueue messageQueue){
         if(DEBUG) Serial.println(F("Sending Query"));
 
         //queryDevice and add to messagesReturned
+        if (pDevice->sensor != errors) messagesReturned += queryDevice(pDevice, messageQueue);
+        else messagesReturned += queryDeviceForError(pDevice, messageQueue);
+
         messagesSent++;
-        messagesReturned += queryDevice(pDevice, messageQueue);
 
         //incriment device pointer
         pDevice = pDevice->pNextDevice;

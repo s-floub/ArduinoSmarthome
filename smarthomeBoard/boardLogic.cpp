@@ -2,10 +2,12 @@
 #include "SensorDataRetrieval.h"
 #include "actuatingCases.h"
 #include "actuateMotors.h"
+#include "errors.h"
 
 extern SoftwareSerial HC12;
 
-int reciveMessageToQueue(pQueue queue) {
+
+int addMessageToQueue(pQueue queue, Message message) {
 
   //Check that there is enough data for a message to be possible
   if (HC12.available() < MINMESSAGELEN) return RETURN_ERR;
@@ -28,6 +30,40 @@ int reciveMessageToQueue(pQueue queue) {
   return RETURN_ERR;
 }
 
+int reciveMessageToQueue(pQueue queue) {
+
+  int delayTime = 100;
+
+  //Check that there is enough data for a message to be possible
+  if (HC12.available() < MINMESSAGELEN) return RETURN_ERR;
+
+  if (HC12.available() >= MAXDATASTRINGLEN){
+    delayTime = 0;
+  }
+
+  //delay to allow new HC12 data to come in
+  delay(delayTime);
+
+  Message theMessage = reciveTransmission();
+
+  //Check if message is valid (not corrupted)
+  if (!checkMessageValidity(theMessage)) {
+
+    //If valid add to queue
+    Enqueue(queue, CreateItem(theMessage));
+    return RETURN_OK;
+  }
+
+  Error recivedInvalid;
+  recivedInvalid.errorCode = invalidTransmission;
+  recivedInvalid.errorTime = millis();
+  addMessageToQueue(errorQueue, generateErrorMessage(recivedInvalid, exception));
+
+  if(DEBUG) Serial.println(F("RECIVEDINVALIDMESSAGE"));
+  if(DEBUG) Serial.println(checkMessageValidity(theMessage));
+  return RETURN_ERR;
+}
+
 void dealWithMessage(Message message) {
 
   if(DEBUG){
@@ -43,7 +79,16 @@ void dealWithMessage(Message message) {
 
   switch (PRODUCTWHAT) {
     case sensorBoard:
-      if (message.messageType == request) {          //Check if Message is a request
+
+      //Check for error case where two boards have the same ID
+      if(!strcmp(PRODUCTNUM, message.productNum) && PRODUCTWHAT == message.productWhat){
+        Error dupeBoard;
+        dupeBoard.errorCode = recivedTransmissionFromSelf;
+        dupeBoard.errorTime = millis();
+        addMessageToQueue(errorQueue, generateErrorMessage(dupeBoard, message.sensor));
+      }
+
+      else if (message.messageType == request) {          //Check if Message is a request
         Request theRequest = parseRequest(message);  //Parse Message to find
 
         //string to match format of Request.destination
@@ -60,8 +105,14 @@ void dealWithMessage(Message message) {
           Serial.println(theRequest.destination);
         }
 
-        if (!strcmp(theRequest.destination, whoIAm)) {  //Check if I am being requested
+        if (!strcmp(theRequest.destination, whoIAm) && theRequest.type != error) {  //Check if I am being requested
           sendMessage(createMessage(theRequest.device, pureData, getSensorData(theRequest.device)));
+        }
+
+        else if (!strcmp(theRequest.destination, whoIAm) && theRequest.type == error){
+          Message errorMessageFromQueue;
+          Dequeue(errorQueue, errorMessageFromQueue);
+          sendMessage(errorMessageFromQueue);
         }
       }
       break;
@@ -91,18 +142,27 @@ void dealWithMessage(Message message) {
       break;
 
     case mainBoard:
-      //If Data write to log file
-      //If error write to other log file
 
-      //printMessageToSerialDEBUG(message);
+      if (message.messageType == error){
+        errorLookupToSerial(message);
+      }
+
+
+      else if (message.messageType == pureData){
+      //Send data to python webserver
       outputToSerialInPythonFormat(message);
       //Send a specific message based on certain sensor conditions
-      sendMessage(createMessage(message.sensor, command, actuatingCases(message)));
+     //Only a specific potentiometer can control the servo
+      if( (!strcmp(message.productNum, sensorPotControl) && message.sensor == pot) || 
+          (!strcmp(message.productNum, sensorPhotoControl) && message.sensor == photo)){
+            sendMessage(createMessage(message.sensor, command, actuatingCases(message)));
+          }
 
       break;
 
     default:
-
+      //Case exists for every board type, a board should never exist unintialised
+      PRODUCTWHAT = sensorBoard;
       break;
   }
 }
