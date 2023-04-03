@@ -208,10 +208,18 @@ int queryDevice(Device* pDevice, pQueue messageQueue){
 }
 
 
-int queryList(pList list, pQueue messageQueue){
+int queryList(pList list, pQueue messageQueue, int skipDigs){
     
     //Start with head
     Device* pDevice = list->head;
+
+
+    //Incriment down list, used for combatting wirelesses scuff
+    for (int i = 0; i < skipDigs; i++){
+        pDevice = pDevice->pNextDevice;
+    }
+
+
 
     //Keep track of how many messages are returned
     int messagesReturned = 0;

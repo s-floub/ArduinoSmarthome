@@ -19,6 +19,8 @@ pQueue errorQueue = CreateQueue();
 
 pList devicesList = initialiseList();
 
+int halfHeight;
+
 void setup() {
   Serial.begin(9600);  // Serial port to computer
   HC12.begin(9600);    // Serial port to HC12
@@ -39,6 +41,7 @@ void setup() {
   insertNode(devicesList, sensorBoard, "11", humid);
   insertNode(devicesList, sensorBoard, "11", temp);
   insertNode(devicesList, sensorBoard, "11", pot);
+  halfHeight = 3;
   }
 }
 
@@ -66,9 +69,13 @@ void loop() {
       if(DEBUG) Serial.println(F("sizeof LL"));
       if(DEBUG) Serial.println((int) sizeof (List));
 
-    queryList(devicesList, messageQueue);
+    queryList(devicesList, messageQueue, 0);
 
-    delay(7000);
+    delay(2000);
+
+    queryList(devicesList, messageQueue, halfHeight);
+
+    delay(2000);
 
   }
 

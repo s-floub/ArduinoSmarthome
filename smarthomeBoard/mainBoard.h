@@ -38,7 +38,7 @@ int compareDevices(Device* first, Device* second);
 int queryDevice(Device* pDevice, pQueue messageQueue);
 
 //query all Devices in list
-int queryList(pList list, pQueue messageQueue);
+int queryList(pList list, pQueue messageQueue, int skipDigs);
 
 //Outputs message data in format to display on python based graphs and store in csv
 int outputToSerialInPythonFormat(Message message);
