@@ -23,21 +23,21 @@ int reciveMessageToQueue(pQueue queue) {
     return RETURN_OK;
   }
 
-  if (DEBUG) Serial.println("RECIVEDINVALIDMESSAGE");
-  if (DEBUG) Serial.println(checkMessageValidity(theMessage));
+  if(DEBUG) Serial.println(F("RECIVEDINVALIDMESSAGE"));
+  if(DEBUG) Serial.println(checkMessageValidity(theMessage));
   return RETURN_ERR;
 }
 
 void dealWithMessage(Message message) {
 
-  if (DEBUG) {
-    Serial.print("message.messageType ");
+  if(DEBUG){
+    Serial.print(F("message.messageType "));
     Serial.println(message.messageType);
-    Serial.print("message.productNum ");
+    Serial.print(F("message.productNum "));
     Serial.println(message.productNum);
-    Serial.print("message.productWhat ");
+    Serial.print(F("message.productWhat "));
     Serial.println(message.productWhat);
-    Serial.print("message.sensor ");
+    Serial.print(F("message.sensor "));
     Serial.println(message.sensor);
   }
 
@@ -53,10 +53,10 @@ void dealWithMessage(Message message) {
         whoIAm[2] = PRODUCTNUM[1];
         whoIAm[3] = '\0';
 
-        if (DEBUG) {
-          Serial.print("whoIAm: ");
+        if(DEBUG) {
+          Serial.print(F("whoIAm: "));
           Serial.println(whoIAm);
-          Serial.print("destination ");
+          Serial.print(F("destination "));
           Serial.println(theRequest.destination);
         }
 
@@ -77,10 +77,10 @@ void dealWithMessage(Message message) {
         whoIAm[2] = PRODUCTNUM[1];
         whoIAm[3] = '\0';
 
-        if (DEBUG) {
-          Serial.print("whoIAm: ");
+        if(DEBUG) {
+          Serial.print(F("whoIAm: "));
           Serial.println(whoIAm);
-          Serial.print("destination ");
+          Serial.print(F("destination "));
           Serial.println(theRequest.destination);
         }
 
@@ -117,43 +117,43 @@ void dealWithMessage(Message message) {
 void printMessageToSerialDEBUG(Message message) {
   if (!DEBUG) return;
 
-  Serial.println("message.productWhat");
-  Serial.write(message.productWhat);
-  Serial.println("message.productNum");
-  Serial.write(message.productNum);
-  Serial.println("message.sensor");
-  Serial.write(message.sensor);
-  Serial.println("message.messageType");
-  Serial.write(message.messageType);
-  Serial.println("message.checkbyte");
-  Serial.write(message.checkbyte);
+    Serial.print(F("message.productWhat "));
+    Serial.println((char) message.productWhat);
+     Serial.print(F("message.productNum "));
+    Serial.println(message.productNum);
+     Serial.print(F("message.sensor "));
+    Serial.println((char) message.sensor);
+     Serial.print(F("message.messageType "));
+    Serial.println((char) message.messageType);
+     Serial.print(F("message.checkbyte"));
+    Serial.println((char) message.checkbyte);
 
-  Serial.println("message.data.type");
-  Serial.write(message.data.type);
+     Serial.println(F("message.data.type"));
+    Serial.write(message.data.type);
 
-  //Switch case prints data in the correct format
-  switch (message.data.type) {
-    case intType:
-      Serial.println("message.data.data.intData");
-      Serial.print(message.data.data.intData);
-      break;
+    //Switch case prints data in the correct format
+    switch(message.data.type){
+        case intType:
+            Serial.print(F("message.data.data.intData "));
+            Serial.println(message.data.data.intData);
+        break;
 
-    case floatType:
-      Serial.println("message.data.data.floatData");
-      Serial.print(message.data.data.floatData);
-      break;
+        case floatType:
+            Serial.print(F("message.data.data.floatData"));
+            Serial.println(message.data.data.floatData);
+        break;
 
-    case strType:
-      Serial.println("message.data.data.strData");
-      Serial.print(message.data.data.strData);
-      break;
+        case strType:
+          Serial.print(F("message.data.data.strData"));
+          Serial.println(message.data.data.strData);
+        break;
 
-    default:
-      //Error case.
-      break;
-  }
-  Serial.println("message.endChar");
-  Serial.write(message.endChar);
+        default:
+            //Error case.
+        break;
+    }
+ Serial.println(F("message.endChar"));
+    Serial.write(message.endChar);
 }
 
 
@@ -161,12 +161,13 @@ void printMessageToSerialDEBUG(Message message) {
 void printRequestToSerialDEBUG(Request request) {
   if (!DEBUG) return;
 
-  Serial.println("request.destination");
-  Serial.write(request.destination);
-  Serial.println("request.device");
-  Serial.write(request.device);
-  Serial.println("request.type");
-  Serial.write(request.type);
-  Serial.println("request.additional");
-  Serial.print((int)request.additional);
+  Serial.print(F("request.destination"));
+  Serial.println(request.destination);
+   Serial.print(F("request.device"));
+  Serial.println((char) request.device);
+   Serial.print(F("request.type"));
+  Serial.println((char) request.type);
+   Serial.print(F("request.additional"));
+  Serial.println((int) request.additional);
+
 }

@@ -178,6 +178,8 @@ int queryDevice(Device* pDevice, pQueue messageQueue){
         if(DEBUG) Serial.println(F("..."));
     }
 
+    delay(500);
+
     //While there are messages avalible, recive those messages to our queue
     while (HC12.available() >= MINMESSAGELEN){
         if(DEBUG) Serial.println(F("Reciving Message"));
@@ -191,7 +193,10 @@ int queryDevice(Device* pDevice, pQueue messageQueue){
     while(messageQueue->count > 0){
         if(DEBUG) Serial.println(F("Processing Message"));
         Message incomingMessage;
-        Dequeue(messageQueue, incomingMessage);
+        if (Dequeue(messageQueue, incomingMessage) == RETURN_ERR) {
+            if(DEBUG) Serial.println(F("Breaking Reading Queue"));
+            break;
+        }
         dealWithMessage(incomingMessage);
         howManyReturns++;
     }
@@ -210,6 +215,7 @@ int queryList(pList list, pQueue messageQueue){
 
     //Keep track of how many messages are returned
     int messagesReturned = 0;
+    int messagesSent = 0;
 
     if(DEBUG) Serial.println(F("Function Called"));
 
@@ -219,6 +225,7 @@ int queryList(pList list, pQueue messageQueue){
         if(DEBUG) Serial.println(F("Sending Query"));
 
         //queryDevice and add to messagesReturned
+        messagesSent++;
         messagesReturned += queryDevice(pDevice, messageQueue);
 
         //incriment device pointer
@@ -228,8 +235,12 @@ int queryList(pList list, pQueue messageQueue){
         delay(300);
     }
 
+
+    if(DEBUG) Serial.println(F("Messages Sent"));
+    if(DEBUG) Serial.println(messagesSent);
     if(DEBUG) Serial.println(F("Messages Returned"));
     if(DEBUG) Serial.println(messagesReturned);
+    if(DEBUG && messagesReturned != messagesSent) Serial.println(F("MESSAGE IN != OUT"));
     return messagesReturned;
 }
 
