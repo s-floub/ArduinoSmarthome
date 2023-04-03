@@ -19,8 +19,6 @@ pQueue errorQueue = CreateQueue();
 
 pList devicesList = initialiseList();
 
-int halfHeight;
-
 void setup() {
   Serial.begin(9600);  // Serial port to computer
   HC12.begin(9600);    // Serial port to HC12
@@ -35,20 +33,15 @@ void setup() {
   changeChannel(DEFAULTCHANNEL);
 
   if (PRODUCTWHAT == mainBoard){
-  insertNode(devicesList, sensorBoard, "57", temp);
+  //insertNode(devicesList, sensorBoard, "57", temp);
   insertNode(devicesList, sensorBoard, "57", pot);
   insertNode(devicesList, sensorBoard, "57", photo);
   insertNode(devicesList, sensorBoard, "11", humid);
   insertNode(devicesList, sensorBoard, "11", temp);
   insertNode(devicesList, sensorBoard, "11", pot);
-  halfHeight = 3;
   }
 }
 
-char readBuffer[100];
-int adjust = 0;
-
-int runOnce = 0;
 
 void loop() {
 
@@ -71,19 +64,20 @@ void loop() {
 
     queryList(devicesList, messageQueue, 0);
 
-    delay(2000);
-
-    queryList(devicesList, messageQueue, halfHeight);
-
-    delay(2000);
+    delay(7000);
 
   }
 
   else {
-    delay(1000);
 
-    if (HC12.available() >= MINMESSAGELEN) {
-      delay(1000);
+    if (HC12.available() >= MAXMESSAGELEN){
+      //There is definitly at least one full message in the queue
+      //or alot of garbage
+      reciveMessageToQueue(messageQueue);
+    }
+
+    else if (HC12.available() >= MINMESSAGELEN) {
+      delay(100); //Allow time if rest of message needs to come in
       reciveMessageToQueue(messageQueue);
     }
 

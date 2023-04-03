@@ -31,11 +31,17 @@ int addMessageToQueue(pQueue queue, Message message) {
 
 int reciveMessageToQueue(pQueue queue) {
 
+  int delayTime = 100;
+
   //Check that there is enough data for a message to be possible
   if (HC12.available() < MINMESSAGELEN) return RETURN_ERR;
 
+  if (HC12.available() >= MAXDATASTRINGLEN){
+    delayTime = 0;
+  }
+
   //delay to allow new HC12 data to come in
-  delay(100);
+  delay(delayTime);
 
   Message theMessage = reciveTransmission();
 
