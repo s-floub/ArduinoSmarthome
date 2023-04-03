@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include <Servo.h>
 
+//Declaration of the function that handles the servo and LED cases
 int actuatingCases(Message message);
 
 #endif

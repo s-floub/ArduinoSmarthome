@@ -3,7 +3,7 @@
 int checkMessageValidity(Message message){
   int sum = 0;
 
-  //Add all message feild values to sum
+  //Add all message field values to sum
   sum += (int) message.productWhat;
   sum += (int) message.productNum[0];
   sum += (int) message.productNum[1];
