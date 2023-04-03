@@ -80,6 +80,9 @@ void dealWithMessage(Message message) {
             if(message.data.data.intData==1){
               turnOnLEDs();
             }
+            if(message.data.data.intData==0){
+              turnOffLEDs();              
+            }
           }          
         }
       

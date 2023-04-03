@@ -100,8 +100,6 @@ light intensity from the photoresistor and temperature from the thermistor*/
 
 int THERM() {  //Function to calculate thermistor temperature in celsius
 
-  //Math from: https://www.circuitgeeks.com/arduino-temperature-sensor-thermistor/
-
   int Vo;                                                    //Gets intital voltage reading from the thermistor pin
   float resistance = 10000;                                  //Sets the resistance as 10k Ohm
   float lognewResistance, newResistance, tKelvin, tCelsius;  //Variables for values to be calculated
@@ -122,8 +120,6 @@ int THERM() {  //Function to calculate thermistor temperature in celsius
 }
 
 int PHOTO() {  //Function to calculate photoresistance in lux
-
-  //Math from: https://www.circuitbasics.com/how-to-use-photoresistors-to-detect-light-on-an-arduino/
 
   int resistance = 10000;  //Sets resistance to 10k Ohm
   int readDelay = 1000;    //Sets a delay for recieving
