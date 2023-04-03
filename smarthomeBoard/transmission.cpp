@@ -134,7 +134,7 @@ Message createMessage(deviceType sensor, messageType messageType, Request data){
     requestToStr[5] = '\0';
 
     if(data.additional){
-        char additionalBuffer[7]; //int max length (base 10) is -32???, 6 digits
+        char additionalBuffer[7]; //int max length (base 10) is -32768, 6 digits
         itoa(data.additional, additionalBuffer, 10);
         strcat(requestToStr, additionalBuffer);
     }

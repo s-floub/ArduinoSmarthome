@@ -49,33 +49,33 @@ int runOnce = 0;
 
 void loop() {
 
-  if(DEBUG) Serial.println(F("sizeof Device"));
-  if(DEBUG) Serial.println((int) sizeof (Device));
-  if(DEBUG) Serial.println(F("sizeof queueItem"));
-  if(DEBUG) Serial.println((int) sizeof (QueueItem));
-  if(DEBUG) Serial.println(F("sizeof Queue"));
-  if(DEBUG) Serial.println((int) sizeof (Queue));
-  if(DEBUG) Serial.println(F("sizeof LL"));
-  if(DEBUG) Serial.println((int) sizeof (List));
-
   if(PRINTEVERYTHING && DEBUG){
   while (HC12.available()) {        // If HC-12 has data
       Serial.write(HC12.read());
     };  // Send the data to Serial
   }
 
-  else if (MAINBOARD) {
+  else if (PRODUCTWHAT == mainBoard) {
+
+      if(DEBUG) Serial.println(F("sizeof Device"));
+      if(DEBUG) Serial.println((int) sizeof (Device));
+      if(DEBUG) Serial.println(F("sizeof queueItem"));
+      if(DEBUG) Serial.println((int) sizeof (QueueItem));
+      if(DEBUG) Serial.println(F("sizeof Queue"));
+      if(DEBUG) Serial.println((int) sizeof (Queue));
+      if(DEBUG) Serial.println(F("sizeof LL"));
+      if(DEBUG) Serial.println((int) sizeof (List));
 
     queryList(devicesList, messageQueue);
 
-    delay(10000);
+    delay(7000);
 
   }
 
   else {
     delay(1000);
 
-    if (HC12.available() > MINMESSAGELEN) {
+    if (HC12.available() >= MINMESSAGELEN) {
       delay(1000);
       reciveMessageToQueue(messageQueue);
     }
