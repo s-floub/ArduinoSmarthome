@@ -4,7 +4,7 @@
 
 
 pQueue CreateQueue (void) {
-  pQueue pnew = (pQueue) malloc (sizeof (struct queue));
+  pQueue pnew = (pQueue) malloc (sizeof (Queue));
   if (pnew != NULL) {
     pnew->front = NULL;
     pnew->back =  NULL;
@@ -34,6 +34,9 @@ bool IsQEmpty (pQueue queue) {
 
 int Enqueue (pQueue queue, pQueueItem item) {
 
+  if(DEBUG) Serial.print(F("Queue Length "));
+  if(DEBUG) Serial.println(queue->count);
+
   if(IsQEmpty(queue)){
     queue->front = item;
   }
@@ -47,6 +50,10 @@ int Enqueue (pQueue queue, pQueueItem item) {
 
 
 int Dequeue (pQueue queue, Message &messageReturn) {
+
+  if(DEBUG) Serial.print(F("Queue Length "));
+  if(DEBUG) Serial.println(queue->count);
+
   if(IsQEmpty(queue)){return RETURN_ERR;}
 
   messageReturn = queue->front->message;

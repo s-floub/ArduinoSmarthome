@@ -1,6 +1,7 @@
 #ifndef MESSAGEQUEUE_H
 #define MESSAGEQUEUE_H
 #include "transmission.h"
+#include <Arduino.h>
 
 //Queue function definitions are more or less taken from MREN 178 lab 2
 
